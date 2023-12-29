@@ -16,3 +16,9 @@
         font-family: 'Open Sans', 'Roboto', sans-serif;        
     }
 }
+
+@layer components {
+    .hover {
+        @apply bg-secondary hover:bg-primary transition-colors duration-150
+    }
+}
