@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  email String @unique
+  name String
+  password String
+  tokens tokens?
+  carts carts[]
+  transactions transactions[]
+  roles Roles @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model products {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  image String
+  stock Int? @default(0)
+  price Int? @default(0)
+  description String?
+  carts carts[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model carts {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  user users @relation(fields: [userId], references: [id])
+  productId String @db.ObjectId
+  product products @relation(fields: [productId], references: [id])
+  quantity Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model transactions {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  orderId Int
+  userId String @db.ObjectId
+  user users @relation(fields: [userId], references: [id])
+  total Int
+  status Status @default(CREATED)
+  products Json
+  method String
+  paymentStatus String
+  midtransResponse Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model tokens {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId @unique
+  user users @relation(fields: [userId], references: [id])
+  token String?
+  expired DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+enum Roles {
+  ADMIN
+  USER
+}
+
+enum Status {
+  CANCEL
+  CREATED
+  PENDING
+  SUCCESS
+}

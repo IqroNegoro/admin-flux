@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Roboto:wght@400;500&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    * {
+        @apply outline-none overscroll-contain
+    }
+
+    * {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+        font-family: 'Open Sans', 'Roboto', sans-serif;        
+    }
+}
