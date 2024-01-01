@@ -18,6 +18,7 @@ model users {
   tokens tokens?
   carts carts[]
   transactions transactions[]
+  orders orders[]
   roles Roles @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
@@ -31,6 +32,7 @@ model products {
   price Int? @default(0)
   description String?
   carts carts[]
+  orders orders[]
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 }
@@ -46,14 +48,26 @@ model carts {
   updatedAt DateTime @default(now())
 }
 
+model orders {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  productId String @db.ObjectId
+  product products @relation(fields: [productId], references: [id])
+  userId String @db.ObjectId
+  user users @relation(fields: [userId], references: [id])
+  transactionsId String @db.ObjectId
+  transactions transactions @relation(fields: [transactionsId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
 model transactions {
   id String @id @default(auto()) @map("_id") @db.ObjectId
-  orderId Int
+  orderId String  @db.ObjectId
+  order orders[]
   userId String @db.ObjectId
   user users @relation(fields: [userId], references: [id])
   total Int
   status Status @default(CREATED)
-  products Json
   method String
   paymentStatus String
   midtransResponse Json

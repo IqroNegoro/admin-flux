@@ -63,6 +63,7 @@ export default object => {
             if (!validator.isNumeric(object[key], {no_symbols: true})) {
                 this.errors[key] = message
             }
+            object[key] = parseInt(object[key])
             return this;
         }
     }

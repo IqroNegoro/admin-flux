@@ -6,8 +6,11 @@ import bodyValidator from "~/server/validator";
 export default defineEventHandler(async e => {
     let req = await readFile(e);
 
-    const validating = bodyValidator(req).isEmpty("name", "Product name cannot be empty")
-    // .isEmpty("price", "Product price cannot be empty");
+    const validating = bodyValidator(req)
+    .isEmpty("name", "Product name cannot be empty")
+    .isEmpty("price", "Product price cannot be empty")
+    .isNum("price", "Please fill correct price!")
+    .isNum("stock", "Please fill correct stock!")
 
     if (validating.hasErr()) throw createError({
         statusCode: 400,

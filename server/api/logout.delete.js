@@ -2,6 +2,7 @@ import prisma from "~/server/db";
 
 export default defineEventHandler(async e => {
     const {refresh} = parseCookies(e);
+
     deleteCookie(e, "token", {
         httpOnly: true,
         secure: true
@@ -21,7 +22,9 @@ export default defineEventHandler(async e => {
             expired: null
         }
     });
+
     setResponseStatus(e, 204);
+    
     return {
         message: "Success logout"
     }

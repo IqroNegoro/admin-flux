@@ -69,7 +69,7 @@ export default defineEventHandler(async e => {
         }
     }
 
-    if (!user) throw createError({statusCode: 401, message: "Unauthenticated"});
-    
+    if (!user) return sendRedirect(e, "/login", 401);
+
     e.context.auth = user;
 });
