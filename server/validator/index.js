@@ -1,22 +1,20 @@
 import validator from "validator";
 
 export default object => {
-        Object.entries(object).forEach(v => {
-            if (typeof v[1] == "object") {
-                Object.entries(v[1]).forEach(vv => {
-                    if (Buffer.isBuffer(object[v[0]][vv[0]])) return;
-                        let filter = validator.escape(object[v[0]][vv[0]]);
-                        filter = validator.trim(filter);
-                        object[v[0]][vv[0]] = filter
-                    })
-                } else {
-                    let filter = validator.escape(v[1]);
-                    filter = validator.trim(filter);
-                    object[v[0]] = filter
-                }
+    Object.entries(object).forEach(v => {
+        if (v[0] == "image") return;
+        if (typeof v[1] == "object") {
+                let filter = validator.escape(object[v[0]][vv[0]]);
+                filter = validator.trim(filter);
+                object[v[0]][vv[0]] = filter
+            } else {
+                let filter = validator.escape(v[1]);
+                filter = validator.trim(filter);
+                object[v[0]] = filter
             }
-        )
-
+        }
+    )
+    console.log(object)
     return {
         result: object,
         errors: {},
@@ -65,6 +63,12 @@ export default object => {
             }
             object[key] = parseInt(object[key])
             return this;
-        }
+        },
+        isInt(key, message) {
+            if (!validator.isInt(object[key], {min: 1, max: 8})) {
+                this.errors[key] = message
+            }
+            return this;
+        },
     }
 }

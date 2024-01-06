@@ -5,12 +5,13 @@ export default defineNitroPlugin(nitroApp => {
 
     client.once(Events.ClientReady, event => {
         console.log(`Ready! Logged in as ${event.user.tag}`);
-    })
+    });
     
     client.on(Events.Error, () => {
         console.log("error")
-    })
+    });
+    
     client.login(config.bot).then(() => {
         nitroApp.client = client;
-    })
-})
+    });
+});

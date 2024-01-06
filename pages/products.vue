@@ -11,20 +11,18 @@
                 <ProductSkeleton v-for="i in 8" :key="i" />
             </template>
             <template v-else>
-                <ProductCard v-for="product in products" :key="product.id" :product="product" />
+                <ProductCard v-for="product in products" :key="product.id" :product="product" @edit-product="id => editStatus = id" @delete-product="id => products = products.filter(v => v.id != id)" />
             </template>
         </div>
-        <LazyProductAdd v-if="addStatus" @close-add-product="addStatus = false" />
+        <LazyProductEdit v-if="editStatus" :id="editStatus" @edit-product="product => products.splice(products.findIndex(v => v.id == product.id), 1, product)" @close-edit-product="editStatus = null" />
+        <LazyProductAdd v-if="addStatus" @add-product="product => products.push(product)" @close-add-product="addStatus = false" />
     </div>
 </template>
 <script setup>
-// const { data, pending, error, refresh } = await useFetch("https://fakestoreapi.com/products", {
-//     lazy: true,
-//     key: "products",
-// });
 const { data: products, pending, error, refresh } = await getProducts();
 
 const addStatus = ref(false);
+const editStatus = ref(null);
 
 useHead({
     title: "Products"

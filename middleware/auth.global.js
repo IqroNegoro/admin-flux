@@ -7,7 +7,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
     if (error.value) {
         user.$reset();
-        console.log("njir gk boleh")
+
         if (to.name != "login" && from.name != "login") return await navigateTo("/login");
     }
 

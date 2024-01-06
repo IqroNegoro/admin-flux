@@ -2,15 +2,25 @@ import readFile from "~/server/utils/readFile";
 import prisma from "~/server/db";
 import { AttachmentBuilder } from "discord.js";
 import bodyValidator from "~/server/validator";
+import isMongoId from "validator/lib/isMongoId"
 
 export default defineEventHandler(async e => {
+    const {id} = getRouterParams(e, "id");
+
+    if (!isMongoId(id)) throw createError({
+        statusCode: 400,
+        message: "The ID is not MongoID",
+        data: {
+            id: "The ID is not MongoID"
+        }
+    });
+
     let req = await readFile(e);
+    console.log(req)
 
     const validating = bodyValidator(req)
     .isEmpty("name", "Product name cannot be empty")
     .isEmpty("price", "Product price cannot be empty")
-    .isLength("stock", {min: 1, max: 8}, "Stock range is 1-99.999.999")
-    .isLength("price", {min: 1, max: 8}, "Price range is 1-99.999.999")
     .isNum("price", "Please fill correct price!")
     .isNum("stock", "Please fill correct stock!")
 
@@ -20,8 +30,6 @@ export default defineEventHandler(async e => {
     })
 
     req = validating.result;
-
-    console.log(req)
 
     if (req.image) {
         const {client} = useNitroApp();
@@ -38,14 +46,15 @@ export default defineEventHandler(async e => {
         req.image = firstImages.url
     }
 
-    const product = await prisma.products.create({
+    const product = await prisma.products.update({
+        where: {id},
         data: req
     });
 
-    setResponseStatus(e, 201);
+    setResponseStatus(e, 200);
 
     return {
-        message: "Success create new product",
+        message: "Success update product",
         data: product
     }
 })

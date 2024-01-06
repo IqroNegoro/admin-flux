@@ -33,6 +33,16 @@
         position: absolute;
         color: gray;
     }
+
+    select {
+        appearance: none;
+        box-shadow: none;
+        display: none;
+    }
+
+    th, td {
+        @apply p-2
+    }
 }
 
 @layer components {

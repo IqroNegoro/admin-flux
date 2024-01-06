@@ -18,7 +18,7 @@
             </div>
             <i class="text-white group-hover:translate-x-0 -translate-x-4 opacity-0 group-hover:opacity-100 duration-150 transition-all bx bx-chevron-right text-xl"></i>
         </NuxtLink>
-        <NuxtLink to="/" class="group flex justify-between items-center hover:bg-white/25 transition-colors duration-150 p-2 rounded-sm">
+        <NuxtLink :to="{name: 'orders'}" class="group flex justify-between items-center hover:bg-white/25 transition-colors duration-150 p-2 rounded-sm">
             <div class="flex gap-4 justify-center items-center">
                 <i class="bx bx-package text-white text-xl"></i>
                 <p class="font-medium text-white">

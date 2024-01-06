@@ -27,7 +27,7 @@ export default defineEventHandler(async e => {
                     id: userToken.userId
                 },
             });
-            
+            console.log("refresh", user)
             delete user.password;
 
             const config = useRuntimeConfig();
