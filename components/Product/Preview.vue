@@ -8,7 +8,7 @@
             <div class="p-2 bg-grey-100">
                 <p class="truncate font-medium tracking-wide"> {{ product?.title || product?.name || "Lorem ipsum dolor sit amet." }} </p>
                 <p class="text-gray-500">{{formatRp(product?.price) || 0}}</p>
-                <p class="truncate text-sm whitespace-pre-line" :class="{'text-gray-500': !product?.description}">{{product?.description || "No description product"}}</p>
+                <p class="truncate text-sm whitespace-pre-line" :class="{'text-gray-500': !product?.description}" v-html="product?.description || 'No description product'"></p>
             </div>
         </div>
     </div>

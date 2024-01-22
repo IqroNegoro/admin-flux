@@ -39,8 +39,7 @@
                     <p v-if="inputError.price" class="text-red-500 text-sm"> {{ inputError.price }} </p>
                 </div>
                 <div class="w-full">
-                    <div contenteditable="true" placeholder="Describe product" class="relative w-full min-h-36" @input="({target}) => description = target.innerText" :class="{'border border-red-500': inputError.description}"></div>
-                    <p v-if="inputError.description" class="text-red-500 text-sm"> {{ inputError.description }} </p>
+                    <QuillEditor placeholder="Description" contentType="html" theme="snow" v-model:content="description" />
                 </div>
             </div>
             <div class="flex flex-row gap-2">
@@ -57,6 +56,18 @@
     </div>
 </template>
 <script setup>
+
+const QuillOptions = ref({
+    modules: {
+        toolbar: [
+            ["bold", "italic", "underline", "strike", "blockquote"],
+            [{"header": 1}, {"header": 2}],
+            [{ 'indent': '-1'}, { 'indent': '+1' }],
+            ['clean']
+        ]
+    }
+})
+
 const emit = defineEmits(["addProduct", "closeAddProduct"]);
 const notification = useNotification();
 const image = ref("");

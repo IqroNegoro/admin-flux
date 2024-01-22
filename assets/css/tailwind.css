@@ -43,6 +43,8 @@
     th, td {
         @apply p-2
     }
+
+  
 }
 
 @layer components {

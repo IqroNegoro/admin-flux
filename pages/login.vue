@@ -27,7 +27,6 @@
                         Login
                     </p>
                 </button>
-                <p class="max-md:text-center" >Doesn't have account? <NuxtLink :to="{name: 'register'}" class="text-primary">Register</NuxtLink></p>
             </form>
         </div>
     </div>

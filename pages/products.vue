@@ -25,6 +25,6 @@ const addStatus = ref(false);
 const editStatus = ref(null);
 
 useHead({
-    title: "Products"
+    title: "Products",
 })
 </script>
