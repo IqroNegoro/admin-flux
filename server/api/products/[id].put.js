@@ -3,7 +3,7 @@ import prisma from "~/server/db";
 import { AttachmentBuilder } from "discord.js";
 import isMongoId from "validator/lib/isMongoId"
 import unescape from "validator/lib/unescape";
-import { object, string, number } from "yup";
+import { object, string, number, boolean } from "yup";
 
 export default defineEventHandler(async e => {
     const {id} = getRouterParams(e, "id");
@@ -21,10 +21,12 @@ export default defineEventHandler(async e => {
     let req = await object({
         image: object().typeError("Please put the product image"),
         name: string().required("Please fill the product name").trim(),
+        sub: string().required("Please fill the product sub text").trim(),
         weight: number().typeError("Please fill stock the product").required("Please fill weight of product").min(0),
-        stock: number().typeError("Please fill stock the product").required("Please fill stock the product").min(0),
+        available: boolean().default(false),
+        published: boolean().default(false),
         price: number().typeError("Please fill price the product").required("Please fill price the product").min(0).max(99999999, max => `Price must less then or equal to ${formatRp(max.max)}`),
-        description: string().nullable().trim()
+        description: string().nullable().ensure().trim()
     }).validate(body, {abortEarly: false}).catch(err => {
         let errors = {};
         err.inner.forEach(v => {

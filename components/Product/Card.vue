@@ -6,6 +6,7 @@
         <div class="p-2 bg-grey-100">
             <p class="truncate font-medium tracking-wide"> {{ product?.title ?? product?.name }} </p>
             <p class="text-gray-500">{{formatRp(product?.price)}}</p>
+            <p class="truncate text-sm">{{ product?.sub }}</p>
         </div>
         <div class="flex flex-row gap-2">
             <button class="w-full flex flex-row gap-2 justify-center items-center hover text-white rounded-sm py-2 font-medium text-sm" @click="$emit('editProduct', product.id)">Edit</button>

@@ -27,13 +27,21 @@
     margin: 0;
     }
 
+    label {
+        @apply font-medium
+    }
+
+    input[type=radio] {
+        @apply accent-primary
+    }
+
     /* Firefox */
     input[type=number] {
     -moz-appearance: textfield;
     }
 
     input, div[contenteditable] {
-        @apply bg-gray-200 rounded-sm p-2
+        @apply border rounded-sm p-2 font-medium text-sm
     }
 
     html {
