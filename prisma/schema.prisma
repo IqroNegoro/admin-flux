@@ -28,6 +28,7 @@ model products {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   name String
   image String
+  weight Int
   stock Int? @default(0)
   price Int? @default(0)
   description String?

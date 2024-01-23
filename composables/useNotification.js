@@ -1,1 +1,0 @@
-export default () => useState("notification", () => ({type: undefined, message: null}));

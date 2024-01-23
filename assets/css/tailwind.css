@@ -20,8 +20,20 @@
         @apply bg-primary
     }
 
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+    -moz-appearance: textfield;
+    }
+
     input, div[contenteditable] {
-        @apply bg-black/10 rounded-sm p-2
+        @apply bg-gray-200 rounded-sm p-2
     }
 
     html {

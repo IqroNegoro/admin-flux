@@ -1,5 +1,6 @@
 import prisma from "~/server/db";
 import isMongoId from "validator/lib/isMongoId"
+import unescape from "validator/lib/unescape";
 
 export default defineEventHandler(async e => {
     const {id} = getRouterParams(e, "id");
@@ -22,6 +23,8 @@ export default defineEventHandler(async e => {
         statusCode: 404,
         message: "Product not found"
     });
+
+    product.description = unescape(product.description)
 
     return product
 })

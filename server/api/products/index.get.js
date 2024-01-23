@@ -1,7 +1,10 @@
 import prisma from "~/server/db";
+import unescape from "validator/lib/unescape";
 
 export default defineEventHandler(async e => {
-    const products = await prisma.products.findMany();
+    let products = await prisma.products.findMany();
+
+    products = products.map(v => ({...v, description: unescape(v.description)}))
 
     return products;
 })

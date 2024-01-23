@@ -1,8 +1,9 @@
 import readFile from "~/server/utils/readFile";
 import prisma from "~/server/db";
 import { AttachmentBuilder } from "discord.js";
-import bodyValidator from "~/server/validator";
 import isMongoId from "validator/lib/isMongoId"
+import unescape from "validator/lib/unescape";
+import { object, string, number } from "yup";
 
 export default defineEventHandler(async e => {
     const {id} = getRouterParams(e, "id");
@@ -15,21 +16,26 @@ export default defineEventHandler(async e => {
         }
     });
 
-    let req = await readFile(e);
-    console.log(req)
+    let body = await readFile(e);
 
-    const validating = bodyValidator(req)
-    .isEmpty("name", "Product name cannot be empty")
-    .isEmpty("price", "Product price cannot be empty")
-    .isNum("price", "Please fill correct price!")
-    .isNum("stock", "Please fill correct stock!")
-
-    if (validating.hasErr()) throw createError({
-        statusCode: 400,
-        data: validating.result
+    let req = await object({
+        image: object().typeError("Please put the product image"),
+        name: string().required("Please fill the product name").trim(),
+        weight: number().typeError("Please fill stock the product").required("Please fill weight of product").min(0),
+        stock: number().typeError("Please fill stock the product").required("Please fill stock the product").min(0),
+        price: number().typeError("Please fill price the product").required("Please fill price the product").min(0).max(99999999, max => `Price must less then or equal to ${formatRp(max.max)}`),
+        description: string().nullable().trim()
+    }).validate(body, {abortEarly: false}).catch(err => {
+        let errors = {};
+        err.inner.forEach(v => {
+            errors[v.path] = v.message
+        })
+        throw createError({
+            statusCode: 400,
+            message: "Something went wrong",
+            data: errors
+        })
     })
-
-    req = validating.result;
 
     if (req.image) {
         const {client} = useNitroApp();
@@ -50,6 +56,8 @@ export default defineEventHandler(async e => {
         where: {id},
         data: req
     });
+
+    product.description = unescape(product.description)
 
     setResponseStatus(e, 200);
 

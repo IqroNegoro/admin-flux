@@ -7,7 +7,9 @@ export default defineNuxtConfig({
     bot: process.env.BOT_TOKEN,
     channelId: process.env.CHANNEL_ID
   },
-  modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"],
+  modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt", ["@vee-validate/nuxt", {
+    autoImports: true
+  }]],
   app: {
     pageTransition: { name: 'page', mode: 'out-in', appear: true },
     head: {
