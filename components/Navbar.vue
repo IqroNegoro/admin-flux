@@ -6,7 +6,7 @@
                 <button type="submit" class="pr-1">
                     <i class="bx bx-search text-2xl text-primary"></i>
                 </button>
-                <input type="text" class="bg-transparent">
+                <input type="text" class="bg-transparent border-0">
             </form>
             <div class="flex flex-row justify-center items-center gap-2 border-l pl-3">
                 <p>{{user.name}}</p>

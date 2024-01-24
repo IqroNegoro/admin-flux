@@ -33,3 +33,7 @@ export const deleteOrder = async id => await useApi(`orders/${id}`, {
     default: () => {},
     key: `delete-${id}-order`
 });
+
+export const getSalesThisMonth = async () => await useApi(`/`, {
+    key: 'get-sales-this-month'
+})

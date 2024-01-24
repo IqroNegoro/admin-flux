@@ -11,13 +11,11 @@
     </div>
 </template>
 <script setup>
-const arr = [];
-for (let i = 1; i <= 30; i++) {
-    arr.push(Math.floor(Math.random() * 10))
-}
+const { data, pending, error, refresh } = await getSalesThisMonth();
+console.log(data.value)
 const options = {
     chart: {
-        id: 'vuechart-example',
+        id: 'Sales This Month',
         zoom: {
             enabled: true
         },
@@ -35,13 +33,14 @@ const options = {
               horizontalAlign: 'left'
             },
     xaxis: {
-        categories: arr
+        categories: data.value.dates,
+        opposite: true
     }
 }
 
 const series = [{
-    name: "Desktops",
-    data: arr
+    name: "Order",
+    data: data.value.series
 }]
 
 useHead({
