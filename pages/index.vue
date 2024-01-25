@@ -24,7 +24,7 @@ const options = {
         enabled: false
     },
     stroke: {
-        curve: 'straight'
+        curve: 'smooth'
     },
     title: {
         text: "Sales Month"
@@ -33,13 +33,19 @@ const options = {
               horizontalAlign: 'left'
             },
     xaxis: {
+        type: 'datetime',
         categories: data.value.dates,
         opposite: true
-    }
+    },
+    tooltip: {
+        x: {
+            format: 'dd/MM/yy HH:mm'
+        },
+    },
 }
 
 const series = [{
-    name: "Order",
+    name: "Sale",
     data: data.value.series
 }]
 

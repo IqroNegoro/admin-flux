@@ -1,8 +1,8 @@
 import readFile from "~/server/utils/readFile";
 import prisma from "~/server/db";
 import { AttachmentBuilder } from "discord.js";
-import isMongoId from "validator/lib/isMongoId"
-import unescape from "validator/lib/unescape";
+import isMongoId from "validator/lib/isMongoId.js"
+import unescape from "validator/lib/unescape.js";
 import { object, string, number, boolean } from "yup";
 
 export default defineEventHandler(async e => {

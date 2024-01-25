@@ -1,6 +1,6 @@
 import prisma from "~/server/db";
-import isMongoId from "validator/lib/isMongoId"
-import unescape from "validator/lib/unescape";
+import unescape from "validator/lib/unescape.js";
+import isMongoId from "validator/lib/isMongoId.js";
 
 export default defineEventHandler(async e => {
     const {id} = getRouterParams(e, "id");

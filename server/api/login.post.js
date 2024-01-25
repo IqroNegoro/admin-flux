@@ -1,7 +1,6 @@
 import prisma from "~/server/db";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import bodyValidator from "../validator/index"
 import { Roles } from "@prisma/client";
 import { object, string } from "yup";
 
