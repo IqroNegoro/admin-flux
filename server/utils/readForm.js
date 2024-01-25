@@ -1,5 +1,5 @@
-import escape from "validator/lib/escape";
-import trim from "validator/lib/trim";
+import escape from "validator/lib/escape.js";
+import trim from "validator/lib/trim.js";
 export default async form => {
     const data = await readBody(form);
 
