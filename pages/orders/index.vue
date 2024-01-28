@@ -1,6 +1,6 @@
 <template>
     <div class="text-sm">
-        <h1 class="text-primary text-2xl font-medium">Orders</h1>
+        <!-- <h1 class="text-primary text-2xl font-medium">Orders</h1>
         <div class="w-full mt-4 shadow rounded-md border border-primary">
             <table class="table-auto w-full">
                 <thead>
@@ -18,7 +18,7 @@
                     <OrderRow v-for="transaction in transactions" :key="transaction.id" :transaction="transaction" @update-status="order => transactions.find(v => v.id == order.id).status = order.status" @delete-order="order => transactions = transactions.filter(v => v.id != order.id)" />
                 </tbody>
             </table>
-        </div>
+        </div> -->
     </div>
 </template>
 <script setup>

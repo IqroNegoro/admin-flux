@@ -3,7 +3,7 @@
     <Transition name="pop-down">
       <Notification v-if="notification.notification" />
     </Transition>
-    <NuxtLoadingIndicator />
+    <!-- <NuxtLoadingIndicator /> -->
     <NuxtPage />
   </NuxtLayout>
 </template>

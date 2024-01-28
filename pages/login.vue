@@ -1,6 +1,6 @@
 <template>
     <div class="w-full h-screen flex justify-center items-center bg-secondary">
-        <div class="w-3/4 h-[80%] shadow-md rounded-sm bg-white grid grid-cols-1 md:grid-cols-2 grid-rows-1 p-4">
+        <div class="w-full md:w-3/4 md:h-[80%] shadow-md rounded-sm bg-white grid grid-cols-1 md:grid-cols-2 grid-rows-1 p-4">
             <div class="max-md:hidden flex justify-center items-center">
                 <i class="bx bxs-shopping-bag-alt text-7xl text-primary"></i>
             </div>

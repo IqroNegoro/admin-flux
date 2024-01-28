@@ -41,7 +41,7 @@
     }
 
     input, div[contenteditable] {
-        @apply border rounded-sm p-2 font-medium text-sm
+        @apply rounded-sm p-2 font-medium text-sm
     }
 
     html {
@@ -74,5 +74,17 @@
 
     .skeleton {
         @apply bg-black/25 animate-pulse rounded-full
+    }
+
+    .unactive p, .active p {
+        @apply transition-opacity duration-300
+    }
+    
+    .unactive p {
+        opacity: 0
+    }
+
+    .active p {
+        opacity: 1
     }
 }

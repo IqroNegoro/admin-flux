@@ -21,7 +21,7 @@ model users {
   // orders orders[]
   roles Roles @default(USER)
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model products {
@@ -37,7 +37,7 @@ model products {
   carts carts[]
   // orders orders[]
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model carts {
@@ -48,7 +48,7 @@ model carts {
   product products @relation(fields: [productId], references: [id])
   quantity Int
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 // model orders {
@@ -60,7 +60,7 @@ model carts {
 //   transactionsId String @db.ObjectId
 //   transactions transactions @relation(fields: [transactionsId], references: [id])
 //   createdAt DateTime @default(now())
-//   updatedAt DateTime @default(now())
+//   updatedAt DateTime @default(now()) @updatedAt
 // }
 
 model transactions {
@@ -78,7 +78,7 @@ model transactions {
   midtransResponse Json
   shippingAddress ShippingAddress
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model tokens {
@@ -88,7 +88,7 @@ model tokens {
   token String?
   expired DateTime?
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 enum Roles {

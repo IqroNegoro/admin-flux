@@ -1,8 +1,9 @@
 <template>
-    <Navbar />
-    <div class="flex bg-white flex-row overflow-hidden h-[calc(100vh-4rem)] max-h-screen w-full">
+    <div class="">
+        <Navbar />
         <Sidebar />
-        <div class="p-4 w-full overflow-y-auto">
+        <Bar />
+        <div class="md:pl-16 p-4">
             <slot />
         </div>
     </div>
