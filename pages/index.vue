@@ -14,7 +14,7 @@
                 </div>
                 <div class="w-full">
                     <ClientOnly>
-                        <!-- <VueApexCharts class="w-96 h-96" type="area" :options="options" :series="series" /> -->
+                        <VueApexCharts type="area" :options="options" :series="series" />
                     </ClientOnly>
                 </div>
             </div>

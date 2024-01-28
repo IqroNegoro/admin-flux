@@ -1,5 +1,5 @@
 <template>
-    <div class="max-md:hidden z-10 fixed left-0 bottom-0 h-[calc(100dvh-4rem)] group hover:active unactive w-14 transition-[width] duration-500 hover:w-64 bg-primary shadow-md flex flex-col gap-4 p-2">
+    <div class="max-md:hidden z-10 fixed left-0 bottom-0 h-[calc(100dvh-4rem)] group hover:active unactive w-14 transition-[width] duration-500 hover:w-64 bg-primary shadow-md flex flex-col gap-2 p-2">
         <NuxtLink :to="{name: 'index'}" :class="{'bg-white/25': $route.name == 'index'}" class="group flex justify-between items-center hover:bg-white/25 transition-colors duration-150 p-2 rounded-sm">
             <div class="flex gap-4 justify-center items-center">
                 <i class="bx bxs-dashboard text-white text-xl"></i>

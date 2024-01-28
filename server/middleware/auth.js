@@ -57,14 +57,14 @@ export default defineEventHandler(async e => {
         
             setCookie(e, "token", token, {
                 maxAge: 60 * 15,
-                // httpOnly: true,
-                // secure: true
+                httpOnly: process.env.NODE_ENV === 'production', // network purpose
+                secure: process.env.NODE_ENV === 'production'
             });
             
             setCookie(e, "refresh", refresh, {
                 maxAge: 60 * 60 * 24,
-                // httpOnly: true,
-                // secure: true
+                httpOnly: process.env.NODE_ENV === 'production', // network purpose
+                secure: process.env.NODE_ENV === 'production'
             });
         }
     }

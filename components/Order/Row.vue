@@ -1,9 +1,6 @@
 <template>
     <tr class="text-center text-sm">
         <td class="text-left">{{ transaction.orderId }}</td>
-        <td class="grid justify-center items-center" :class="{'grid-cols-1 grid-rows-1': transaction.products.length == 1, 'grid-cols-2 grid-rows-1': transaction.products.length == 2, 'grid-cols-2 grid-rows-2': transaction.products.length == 3, 'grid-cols-2 grid-rows-2': transaction.products.length == 4}">
-            <img v-for="product in transaction.products" :key="product.id" :src="product.image" alt="" :class="{'w-12 h-12': transaction.products.length >= 4, 'w-16 h-16': transaction.products.length == 3, 'w-20 h-20': transaction.products.length == 2, 'w-24 h-24': transaction.products.length == 1}" class="aspect-square rounded-md mx-auto">
-        </td>
         <td>{{ formatRp(transaction.total) }}</td>
         <td>{{transaction.user.name}}</td>
         <td>
@@ -28,7 +25,7 @@
             </div>
         </td>
         <td>
-            <div class="text-lg flex flex-row gap-2">
+            <div class="text-lg flex justify-center items-center flex-row gap-2">
                 <NuxtLink class="flex justify-center items-center bg-blue-500 text-white rounded-sm p-2 font-medium" :to="{name: 'orders-id', params: {id: transaction.id}}">
                     <i class="bx bx-info-circle"></i>
                 </NuxtLink>

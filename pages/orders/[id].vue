@@ -1,55 +1,87 @@
 <template>
-    <div class="flex flex-col gap-2" v-if="order">
-        <h1 class="font-light text-xl">Order #{{order.id}}</h1>
-        <div class="w-full flex justify-center flex-col md:flex-row items-center md:items-start gap-8">
-            <div class="w-full flex flex-col gap-4">
-                <OrderCard v-for="product in order.products" :key="product.id" :product="product" />
+    <div class="flex flex-col md:grid md:grid-cols-2 md:grid-rows-2 md:gap-12 py-4 w-full lg:w-3/4 mx-auto" v-if="order">
+        <div class="col-span-2 row-span-2">
+            <div class="font-medium text-xl flex flex-row justify-between items-center w-full">
+                <p>Status Order</p>
+                <p class="text-xs"> Updated at {{moment(order.updatedAt).format('D/MM/y h:mm a')}}</p>
             </div>
-            <div class="w-3/4 text-sm flex flex-col gap-8 max-md:order-first">
-                <div class="w-full flex flex-col bg-gray-100 p-8 justify-between rounded-md">
-                    <div>
-                        <h1 class="text-xl font-medium">Order Summary</h1>
-                        <table class="w-full table-fixed">
-                            <tbody>
-                                <tr class="font-medium">
-                                    <td>Order ID</td>
-                                    <td>{{ order.orderId }}</td>
-                                </tr>
-                                <tr class="font-medium">
-                                    <td>Payment</td>
-                                    <td>{{ pascal(order.method) || '-' }}</td>
-                                </tr>
-                                <tr class="font-medium">
-                                    <td>Bank</td>
-                                    <td>{{ capitalize(order.midtransResponse.va_numbers[0].bank) }}</td>
-                                </tr>
-                                <tr class="font-medium">
-                                    <td>VA Number</td>
-                                    <td>{{ order.midtransResponse.va_numbers[0].va_number }}</td>
-                                </tr>
-                                <tr class="font-medium">
-                                    <td>Order Status</td>
-                                    <td>{{ capitalize(order.status) }}</td>
-                                </tr>
-                                <tr class="font-medium">
-                                    <td>Payment Status</td>
-                                    <td>{{ capitalize(order.paymentStatus) }}</td>
-                                </tr>
-                                <tr class="font-medium">
-                                    <td>Expiry Time</td>
-                                    <td>{{ moment(order.midtransResponse.expiry_time).format("D MMMM YYYY, hh:mm:ss A") }}</td>
-                                </tr>
-                                <tr class="font-medium">
-                                    <td>Subtotal</td>
-                                    <td>{{ formatRp(order.total) }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+            <div class="flex flex-col gap-4 w-full">
+                <div class="w-full rounded-full h-4 bg-black/10">
+                    <div class="bg-primary h-4 rounded-full" :class="{'w-[25%]': order.status === 'CREATED', 'w-[50%]': order.status === 'PENDING', 'w-[75%]': order.status === 'CONFIRMED', 'w-full': order.status === 'SUCCESS'}"></div>
+                </div>
+                <div class="flex flex-row justify-between items-center">
+                    <div class="flex flex-col gap-2 justify-center items-center">
+                        <div class="bg-primary p-2 rounded-md w-min hover:-translate-y-2 duration-150 transition-transform">
+                            <div class="rounded-full p-1 flex justify-center items-center bg-white">
+                                <i class="bx bx-check"></i>
+                            </div>
+                        </div>
+                        <p class="max-md:text-xs font-medium">Created</p>
+                    </div>
+                    <div class="flex flex-col gap-2 justify-center items-center">
+                        <div class="bg-primary p-2 rounded-md w-min hover:-translate-y-2 duration-150 transition-transform">
+                            <div class="rounded-full p-1 flex justify-center items-center bg-white">
+                                <i class="bx bx-check-double"></i>
+                            </div>
+                        </div>
+                        <p class="max-md:text-xs font-medium">Paided</p>
+                    </div>
+                    <div class="flex flex-col gap-2 justify-center items-center">
+                        <div class="bg-primary p-2 rounded-md w-min hover:-translate-y-2 duration-150 transition-transform">
+                            <div class="rounded-full p-1 flex justify-center items-center bg-white">
+                                <i class="bx bx-package"></i>
+                            </div>
+                        </div>
+                        <p class="max-md:text-xs font-medium">Processed</p>
+                    </div>
+                    <div class="flex flex-col gap-2 justify-center items-center">
+                        <div class="bg-primary p-2 rounded-md w-min hover:-translate-y-2 duration-150 transition-transform">
+                            <div class="rounded-full p-1 flex justify-center items-center bg-white">
+                                <i class="bx bxs-ship"></i>
+                            </div>
+                        </div>
+                        <p class="max-md:text-xs font-medium">Shipped</p>
                     </div>
                 </div>
             </div>
         </div>
-    </div>   
+        <div class="flex flex-col gap-4">
+            <h1 class="text-xl font-medium">Products</h1>
+            <OrderCard v-for="product in order.products" :key="product.id" :product="product" />
+        </div>
+        <div class="flex flex-col gap-4">
+            <div class="flex flex-col gap-1">
+                <h1 class="text-xl font-medium">Order Detail</h1>
+                <p class="font-medium">ID</p>
+                <p class="text-sm"> {{ order.orderId }} </p>
+                <p class="font-medium">Total</p>
+                <p class="text-sm"> {{ formatRp(order.total) }} </p>
+                <p class="font-medium">Status</p>
+                <p class="text-sm">
+                    {{ order.paymentStatus == 'settlement' ? 'Paided' : 'Unpaid' }}
+                </p>
+                <p class="font-medium">Method</p>
+                <p class="text-sm"> {{ pascal(order.method) }} </p>
+                <template v-if="order.paymentStatus != 'settlement'">
+                    <p class="font-medium">Bank</p>
+                    <p class="text-sm"> {{ capitalize(order.midtransResponse.va_numbers[0].bank) }} </p>
+                    <p class="font-medium">VA Number</p>
+                    <p class="text-sm"> {{ order.midtransResponse.va_numbers[0].va_number }} </p>
+                    <p class="font-medium">Paid before</p>
+                    <p class="text-sm"> {{ moment(order.midtransResponse.expiry_time).format("D MMMM YYYY, hh:mm:ss A") }} </p>
+                </template>
+            </div>
+            <div class="flex flex-col gap-1">
+                <h1 class="text-xl font-medium">Delivery Address</h1>
+                <div class="flex flex-col text-sm text-gray-500">
+                    <p> {{ order.shippingAddress.first_name }} </p>
+                    <p> {{ order.shippingAddress.province }}, {{ order.shippingAddress.city }}</p>
+                    <p> {{ order.shippingAddress.address }} </p>
+                    <p> {{ order.shippingAddress.postal_code }} </p>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 <script setup>
 import moment from "moment";

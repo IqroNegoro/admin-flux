@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed w-full h-full top-0 left-0 bg-black/25 flex justify-center items-center">
+    <div class="fixed z-20 w-full h-full top-0 left-0 bg-black/25 flex justify-center items-center">
         <form class="w-full h-full bg-white flex flex-col gap-4 p-4" @submit.prevent="handlePost">
             <div class="flex flex-row justify-between">
                 <div></div>
@@ -99,7 +99,7 @@
                 <button type="button" class="w-full text-primary hover:text-white hover:bg-primary duration-150 transition-colors border border-primary" @click="preview = true">Preview</button>
             </div>
         </form>
-        <LazyProductPreview v-if="preview" :product="{image, name, stock, price, description}" @close-preview="preview = false" />
+        <LazyProductPreview v-if="preview" :product="{image, name, stock, price, sub}" @close-preview="preview = false" />
     </div>
 </template>
 <script setup>
@@ -182,13 +182,13 @@ const handlePost = async () => {
     pending.value = false;
 
     if (error.value) {
-        notification.error("Something went wrong when updating product");
+        notification.error("Something went wrong when creating product");
         setErrors(error.value.data.data);
         return;
     }
 
     emit("addProduct", data.value);
-    notification.success("Success updating product");
+    notification.success("Success creating product");
     emit("closeAddProduct");
 }
 </script>

@@ -1,9 +1,9 @@
 <template>
     <div class="flex flex-row gap-4 p-2 w-full relative">
-        <img :src="product?.image" alt="" class="aspect-square w-32 object-cover rounded-md">
-        <div class="flex flex-col justify-between items-start w-full">
-            <div>
-                <p class="font-medium text-lg truncate">
+        <img :src="product?.image" alt="" class="aspect-square w-32 h-32 object-cover object-center rounded-md">
+        <div class="flex flex-col justify-between items-start w-full truncate">
+            <div class="truncate w-full">
+                <p class="font-medium text-sm md:text-lg truncate w-full">
                     {{ product?.name }}
                 </p>
                 <p class="text-gray-500 text-sm">

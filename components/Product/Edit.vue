@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed w-full h-full top-0 left-0 bg-black/25 flex justify-center items-center">
+    <div class="z-20 fixed w-full h-full top-0 left-0 bg-black/25 flex justify-center items-center">
         <form class="w-full h-full bg-white flex flex-col gap-4 p-4" @submit.prevent="handlePost">
             <ProductEditSkeleton v-if="pending" />
             <template v-else>

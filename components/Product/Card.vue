@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col justify-between rounded-md shadow-md cursor-pointer">
         <div class="border-b-0 rounded-t-md p-2">
-            <img :src="product?.image" :alt="product?.name" class="rounded-md w-48 h-48 object-contain aspect-square mx-auto">
+            <img :src="product?.image" :alt="product?.name" class="rounded-md w-48 h-48 object-center object-cover aspect-square mx-auto">
         </div>
         <div class="p-2 bg-grey-100">
             <p class="truncate font-medium tracking-wide"> {{ product?.title ?? product?.name }} </p>

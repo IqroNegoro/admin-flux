@@ -4,13 +4,13 @@ export default defineEventHandler(async e => {
     const {refresh} = parseCookies(e);
 
     deleteCookie(e, "token", {
-        httpOnly: true,
-        secure: true
+        httpOnly: process.env.NODE_ENV === 'production', // network purpose
+        secure: process.env.NODE_ENV === 'production'
     });
 
     deleteCookie(e, "refresh", {
-        httpOnly: true,
-        secure: true
+        httpOnly: process.env.NODE_ENV === 'production', // network purpose
+        secure: process.env.NODE_ENV === 'production'
     });
 
     const saving = await prisma.tokens.update({
