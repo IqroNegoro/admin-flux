@@ -9,6 +9,15 @@
             </div>
             <i class="text-white group-hover:translate-x-0 -translate-x-4 opacity-0 group-hover:opacity-100 duration-150 transition-all bx bx-chevron-right text-xl"></i>
         </NuxtLink>
+        <NuxtLink :to="{name: 'categories'}" :class="{'bg-white/25': $route.name == 'categories'}" class="group flex justify-between items-center hover:bg-white/25 transition-colors duration-150 p-2 rounded-sm">
+            <div class="flex gap-4 justify-center items-center">
+                <i class="bx bx-category text-white text-xl"></i>
+                <p class="font-medium text-white">
+                    Categories
+                </p>
+            </div>
+            <i class="text-white group-hover:translate-x-0 -translate-x-4 opacity-0 group-hover:opacity-100 duration-150 transition-all bx bx-chevron-right text-xl"></i>
+        </NuxtLink>
         <NuxtLink :to="{name: 'products'}" :class="{'bg-white/25': $route.name == 'products'}" class="group flex justify-between items-center hover:bg-white/25 transition-colors duration-150 p-2 rounded-sm">
             <div class="flex gap-4 justify-center items-center">
                 <i class="bx bxs-component text-white text-xl"></i>

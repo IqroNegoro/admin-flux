@@ -121,6 +121,7 @@ const QuillOptions = ref({
         ]
     }
 })
+
 const emit = defineEmits(["editProduct", "closeEditProduct"]);
 const { id } = defineProps(["id"]);
 const notification = useNotification();

@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -24,6 +25,12 @@ model users {
   updatedAt DateTime @default(now()) @updatedAt
 }
 
+model categories {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  products products[]
+}
+
 model products {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   name String
@@ -34,10 +41,14 @@ model products {
   published Boolean @default(false)
   price Int? @default(0)
   description String
+  categories categories @relation(fields: [categoryId], references: [id])
+  categoryId String @db.ObjectId
   carts carts[]
   // orders orders[]
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+
+  @@index(fields: [name, categoryId])
 }
 
 model carts {
@@ -111,6 +122,12 @@ type ProductsTransaction {
   price Int @default(0)
   quantity Int @default(0)
   description String?
+  categories Category
+}
+
+type Category {
+  id String
+  name String
 }
 
 type ShippingAddress {

@@ -1,4 +1,5 @@
-export const getProducts = async () => await useApi("products", {
+export const getProducts = async options => await useApi("products", {
+    ...options,
     default: () => [],
     lazy: true,
     key: "get-products",
@@ -8,6 +9,14 @@ export const getProduct = async id => await useApi(`products/${id}`, {
     default: () => {},
     lazy: true,
     key: `get-${id}-product`
+});
+
+export const searchProducts = async options => await useApi(`products/search`, {
+    ...options,
+    default: () => [],
+    lazy: true,
+    immediate: false,
+    key: `search-product`
 })
 
 export const createProduct = async body => await useApi("products", {

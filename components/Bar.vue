@@ -4,6 +4,10 @@
             <i class="bx bxs-dashboard text-xl"></i>
             <p class="text-xs font-medium">Dashboard</p>
         </NuxtLink>
+        <NuxtLink :to="{name: 'categories'}" :class="{'bg-white/25': $route.name == 'categories'}" class="text-white w-full hover:bg-white/25 flex justify-center items-center flex-col transition-colors duration-150 px-3 py-1 rounded-sm">
+            <i class="bx bx-category text-xl"></i>
+            <p class="text-xs font-medium">Categories</p>
+        </NuxtLink>
         <NuxtLink :to="{name: 'products'}" :class="{'bg-white/25': $route.name == 'products'}" class="text-white w-full hover:bg-white/25 flex justify-center items-center flex-col transition-colors duration-150 px-3 py-1 rounded-sm">
             <i class="bx bxs-component text-xl"></i>
             <p class="text-xs font-medium">Products</p>
