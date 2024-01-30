@@ -3,13 +3,13 @@
         <div class="flex justify-between">
             <h1 class="text-primary text-2xl font-medium">Categories</h1>
             <div class="flex gap-2 flex-row">
-                <button @click="(categories.pagination?.prev || searchedCategories.pagination?.prev) ? page-- : null" class="disabled:text-gray-500 disabled:cursor-not-allowed px-2 flex justify-center items-center border border-primary rounded-md hover:bg-primary hover:text-white transition-colors duration-150" :disabled="!(categories.pagination?.prev || searchedCategories.pagination?.prev)">
+                <button @click="categories.pagination?.prev ? page-- : null" class="disabled:text-gray-500 disabled:cursor-not-allowed px-2 flex justify-center items-center border border-primary rounded-md hover:bg-primary hover:text-white transition-colors duration-150" :disabled="!categories.pagination?.prev">
                     <i class="bx bx-chevron-left"></i>
                 </button>
                 <p class="flex justify-center items-center">
                     {{ page }}
                 </p>
-                <button @click="(categories.pagination?.next || searchedCategories.pagination?.next) ? page++ : null" class="disabled:text-gray-500 disabled:cursor-not-allowed px-2 flex justify-center items-center border border-primary rounded-md hover:bg-primary hover:text-white transition-colors duration-150" :disabled="!(categories.pagination?.next || searchedCategories.pagination?.next)">
+                <button @click="categories.pagination?.next ? page++ : null" class="disabled:text-gray-500 disabled:cursor-not-allowed px-2 flex justify-center items-center border border-primary rounded-md hover:bg-primary hover:text-white transition-colors duration-150" :disabled="!categories.pagination?.next">
                     <i class="bx bx-chevron-right"></i>
                 </button>
                 <div class="flex flex-row rounded-md">
@@ -34,16 +34,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-if="pendingCategories || pendingSearch">
+                    <tr v-if="pendingCategories">
                         <td colspan="4">
                             <div class="flex justify-center items-center">
                                 <i class="bx bx-loader-alt bx-spin text-2xl mx-auto"></i>
                             </div>
                         </td>
                     </tr>
-                    <template v-else-if="searchedCategories.length">
-                        <CategoryRow v-for="(category, i) in searchedCategories" :key="category.id" :i="i" :category="category" @edit-category="id => editStatus = id" @delete-category="category => searchedCategories = searchedCategories.filter(v => v.id != category.id)" />
-                    </template>
                     <template v-else>
                         <CategoryRow v-for="(category, i) in categories.data" :key="category.id" :i="i" :category="category" @edit-category="id => editStatus = id" @delete-category="category => categories = categories.filter(v => v.id != category.id)" />
                     </template>
@@ -64,22 +61,14 @@ const q = ref("");
 const { data: categories, pending: pendingCategories, error: errorCategories, refresh: refreshCategories } = await getCategories({
     params: {
         limit,
-        page
+        page,
+        q
     }
 });
 
-watch(categories, val => console.log(val))
-
-const { data: searchedCategories, pending: pendingSearch, error: errorSearch, execute: executeSearch } = await searchCategories({
-    params: {
-        q,
-        skip,
-        limit,
-        page
-    }
-});
-
-pendingSearch.value = false;
+watch(q, val => {
+    page.value = 1
+})
 
 const addStatus = ref(false);
 const editStatus = ref(false);
