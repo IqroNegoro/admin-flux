@@ -1,9 +1,20 @@
-import prisma from '~/server/db';
+import unescape from "validator/lib/unescape.js";
+import prisma from "~/server/db";
 
 export default defineEventHandler(async e => {
-    const { page, limit } = getQuery(e);
+    const {q, limit, skip, page} = getQuery(e);
 
+    if (!q) return [];
+    
+    const query = unescape(q);
+    
     const categories = await prisma.categories.findMany({
+        where: {
+            name: {
+                contains: query,
+                mode: "insensitive"
+            }
+        },
         skip: (+limit || 0) * ((+page || 1) - 1),
         take: (+limit || 10) + 1
     });
@@ -16,7 +27,5 @@ export default defineEventHandler(async e => {
         }
     }
 
-    console.log(result)
-
-    return result;
-})
+    return categories
+});

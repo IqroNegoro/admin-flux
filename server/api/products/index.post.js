@@ -48,8 +48,5 @@ export default defineEventHandler(async e => {
 
     setResponseStatus(e, 201);
 
-    return {
-        message: "Success create new product",
-        data: product
-    }
+    return product
 })

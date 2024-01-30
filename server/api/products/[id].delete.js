@@ -16,8 +16,5 @@ export default defineEventHandler(async e => {
         where: {id}
     });
 
-    return {
-        message: "Success delete product",
-        data: {id: product.id}
-    };
+    return {id: product.id}
 })

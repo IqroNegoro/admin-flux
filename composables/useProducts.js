@@ -16,26 +16,23 @@ export const searchProducts = async options => await useApi(`products/search`, {
     default: () => [],
     lazy: true,
     immediate: false,
-    key: `search-product`
-})
+    key: `search-products`
+});
 
 export const createProduct = async body => await useApi("products", {
     method: "POST",
-    transform: res => res.data,
     body,
     key: "post-products"
 });
 
 export const updateProduct = async (id, body) => await useApi(`products/${id}`, {
     method: "PUT",
-    transform: res => res.data,
     body,
-    key: "post-products"
+    key: `update-${id}-products`
 });
 
 export const deleteProduct = async id => await useApi(`products/${id}`, {
     method: "DELETE",
-    transform: res => res.data,
     immediate: false,
-    key: "delete-products"
+    key: `delete-${id}-products`
 })

@@ -50,7 +50,7 @@ const [name, nameAttr] = defineField("name", validateType)
 const pending = ref(false);
 
 const handlePost = async () => {
-    if (pending.value) return;
+    if (pending.value || !name.value) return;
     pending.value = true;
 
     const validating = await validate();
@@ -60,7 +60,7 @@ const handlePost = async () => {
         return;
     }
 
-    const {data, error} = await createCategories(values);
+    const {data, error} = await createCategory(values);
 
     pending.value = false;
 

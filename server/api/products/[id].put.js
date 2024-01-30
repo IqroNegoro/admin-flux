@@ -18,7 +18,7 @@ export default defineEventHandler(async e => {
 
     let body = await readFile(e);
 
-    let req = await object({
+    let data = await object({
         image: object().typeError("Please put the product image"),
         name: string().required("Please fill the product name").trim(),
         sub: string().required("Please fill the product sub text").trim(),
@@ -39,11 +39,11 @@ export default defineEventHandler(async e => {
         })
     })
 
-    if (req.image) {
+    if (data.image) {
         const {client} = useNitroApp();
         const config = useRuntimeConfig();
         const channel = client.channels.cache.get(config.channelId);
-        let attachment = new AttachmentBuilder(req.image.data).setName(req.image.filename).setDescription(req.image.filename);
+        let attachment = new AttachmentBuilder(data.image.data).setName(data.image.filename).setDescription(data.image.filename);
         let sending = await channel.send({
             content: `${new Date().getDate()}-${new Date().getMonth() + 1}-${new Date().getFullYear()}, ${e.context.auth.name}`,
             files: [attachment],
@@ -51,20 +51,17 @@ export default defineEventHandler(async e => {
             return err
         });
         let [firstImages] = sending.attachments.values();
-        req.image = firstImages.url
+        data.image = firstImages.url
     }
 
     const product = await prisma.products.update({
         where: {id},
-        data: req
+        data
     });
 
     product.description = unescape(product.description)
 
     setResponseStatus(e, 200);
 
-    return {
-        message: "Success update product",
-        data: product
-    }
+    return product
 })

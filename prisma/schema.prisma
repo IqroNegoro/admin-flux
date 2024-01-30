@@ -3,7 +3,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -29,6 +28,8 @@ model categories {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   name String
   products products[]
+
+  @@index(fields: [name])
 }
 
 model products {

@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-flow-row my-2 gap-4">
-            <template v-if="pendingProducts || pendingProduct">
+            <template v-if="pendingProducts || pendingSearch">
                 <ProductSkeleton v-for="i in 8" :key="i" />
             </template>
             <template v-else-if="searchedProducts.length">
@@ -38,12 +38,12 @@
 <script setup>
 const q = ref("");
 const { data: products, pending: pendingProducts, error: errorProducts, refresh: refreshProducts } = await getProducts();
-const { data: searchedProducts, pending: pendingProduct, error: errorProduct, execute: executeProduct } = await searchProducts({
+const { data: searchedProducts, pending: pendingSearch, error: errorSearch, execute: executeSearch } = await searchProducts({
     params: {
         q
     }
 });
-pendingProduct.value = false;
+pendingSearch.value = false;
 watch(searchedProducts, val => {
     console.log(val);
 })

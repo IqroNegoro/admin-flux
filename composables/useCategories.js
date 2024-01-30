@@ -5,18 +5,35 @@ export const getCategories = async options => await useApi(`categories`, {
     key: "get-categories"
 });
 
-export const createCategories = async body => await useApi(`categories`, {
-    method: "POST",
+export const getCategory = async id => await useApi(`categories/${id}`, {
     lazy: true,
-    body,
     default: () => {},
+    key: `get-${id}-category`
+})
+
+export const createCategory = async body => await useApi(`categories`, {
+    method: "POST",
+    body,
     key: "post-categories"
 });
 
-export const deleteCategories = async id => await useApi(`categories/${id}`, {
-    method: "DELETE",
+export const searchCategories = async options => await useApi(`categories/search`, {
+    ...options,
     lazy: true,
+    default: () => [],
+    immediate: false,
+    key: "search-categories"
+})
+
+export const updateCategory = async (id, body) => await useApi(`categories/${id}`, {
+    method: "PUT",
+    body,
+    key: `update-${id}-category`
+})
+
+export const deleteCategory = async id => await useApi(`categories/${id}`, {
+    method: "DELETE",
     immediate: false,
     default: () => {},
     key: `delete-${id}-categories`
-})
+});
