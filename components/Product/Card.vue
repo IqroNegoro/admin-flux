@@ -6,6 +6,10 @@
         <div class="p-2 bg-grey-100">
             <p class="truncate font-medium tracking-wide"> {{ product?.title ?? product?.name }} </p>
             <p class="text-gray-500">{{formatRp(product?.price)}}</p>
+            <div class="text-gray-500 text-xs flex flex-row justify-between">
+                <p>Stock</p>
+                <p>x{{product?.stock || 0}}</p>
+            </div>
             <p class="truncate text-sm">{{ product?.sub }}</p>
         </div>
         <div class="flex flex-row gap-2">
@@ -25,16 +29,10 @@ const handleDeleteProduct = async () => {
     await execute();
 
     if (error.value) {
-        notification.value = {
-            type: "error",
-            message: "Something wrong when deleting product"
-        }
+        notification.error("Soemthing error when deleting product");
         return;
     }
-    notification.value = {
-        type: "success",
-        message: "Product deleted"
-    }
+    notification.success("Success deleting product");
 
     emit("deleteProduct", data.value.id);
 }

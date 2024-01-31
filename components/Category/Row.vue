@@ -3,9 +3,9 @@
         <td>{{ i + 1 }}</td>
         <td class="font-medium">{{ category.name }}</td>
         <td>
-            <button class="bg-primary px-3 py-1 font-medium rounded-sm text-white">
+            <NuxtLink :to="{name: 'categories-id-products', params: {id: category.id}}" class="bg-primary px-3 py-1 font-medium rounded-sm text-white">
                 Products
-            </button>
+            </NuxtLink>
         </td>
         <td>
             <div class="text-lg flex justify-center items-center flex-row gap-2">

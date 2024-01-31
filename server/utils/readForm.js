@@ -2,7 +2,7 @@ import escape from "validator/lib/escape.js";
 import trim from "validator/lib/trim.js";
 export default async form => {
     const data = await readBody(form);
-    console.log(data)
+    console.log(data, "data readForm")
     Object.entries(data).forEach(v => {
         if (v[0] == "image" && typeof v[1] == 'object') return;
         if (typeof v[1] == "object") {

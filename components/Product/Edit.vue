@@ -58,18 +58,9 @@
                         <p v-if="errors.price" class="text-red-500 text-sm"> {{ errors.price }} </p>
                     </div>
                     <div class="w-full flex flex-col gap-1">
-                        <p class="font-medium">Status Product</p>
-                        <div class="flex flex-row gap-2 items-center">
-                            <div class="flex flex-row gap-1">
-                                <input type="radio" v-model="available" value="true" name="available" id="available">
-                                <label for="available">Available</label>
-                            </div>
-                            <div class="flex flex-row gap-1">
-                                <input type="radio" v-model="available" value="false" name="available" id="unavailable">
-                                <label for="unavailable">Out of Stock</label>
-                            </div>
-                        </div>
-                        <p v-if="errors.available" class="text-red-500 text-sm"> {{ errors.available }} </p>
+                        <p class="font-medium">Stock Product</p>
+                        <input type="text" class="w-full" placeholder="Stock Product" v-model="stock" :class="{'border border-red-500': errors.stock}">
+                        <p v-if="errors.stock" class="text-red-500 text-sm"> {{ errors.stock }} </p>
                     </div>
                     <div class="w-full flex flex-col gap-1">
                         <p class="font-medium">Published</p>
@@ -84,6 +75,22 @@
                             </div>
                         </div>
                         <p v-if="errors.published" class="text-red-500 text-sm"> {{ errors.published }} </p>
+                    </div>
+                    <div class="group relative w-full flex flex-col gap-1 md:col-span-2 lg:col-span-3">
+                        <p class="font-medium">Category</p>
+                        <button type="button" class="group text-left">Select Category</button>
+                        <div class="hidden absolute top-full left-0 w-full max-h-64 overflow-y-auto border z-20 bg-white group-focus-within:flex flex-col gap-2" :class="{'justify-center items-center': pendingCategories}">
+                            <i v-if="pendingCategories" class="bx bx-loader-alt bx-spin text-5xl"></i>
+                            <template v-else>
+                                <button v-for="category in productCategories.data" :key="category.id" :class="{'hidden': categories.includes(category.id)}" type="button" @click="categories.push(category.id)" class="p-2 hover:bg-black/10 font-medium w-full text-left"> {{ category.name }} </button>
+                            </template>
+                        </div>
+                        <div class="w-full flex flex-row pb-2 gap-2 overflow-x-auto">
+                            <button type="button" class="px-3 py-1 bg-primary font-medium text-white rounded-sm" v-for="category in categories" :key="category.id" @click="categories = categories.filter(v => v != category)">
+                                {{ productCategories?.data.find(v => v.id == category).name }}
+                            </button>
+                        </div>
+                        <p v-if="errors.category" class="text-red-500 text-sm"> {{ errors.category }} </p>
                     </div>
                     <div class="w-full flex flex-col gap-1 col-[1/-1]">
                         <p class="font-medium">Product Description</p>
@@ -109,7 +116,7 @@
 </template>
 <script setup>
 import { toTypedSchema } from "@vee-validate/yup";
-import { object, string, number, boolean } from "yup";
+import { object, string, number, boolean, array } from "yup";
 
 const QuillOptions = ref({
     modules: {
@@ -133,11 +140,15 @@ const { values, defineField, errors, setErrors, validate } = useForm({
         name: string().required("Please fill the product name").trim(),
         sub: string().required("Please fill the product sub text").trim(),
         weight: number().typeError("Please fill stock the product").required("Please fill weight of product").min(0),
-        available: boolean().default(false),
+        stock: number().typeError("Please fill stock the product").required("Please fill weight of product").min(0),
+        categories: array().min(1, "Please select min 1 category of product").required("Please select min 1 category of product"),
         published: boolean().default(false),
         price: number().typeError("Please fill price the product").required("Please fill price the product").min(0).max(99999999, max => `Price must less then or equal to ${formatRp(max.max)}`),
         description: string().nullable().ensure().trim()
-    }))
+    })),
+    initialValues: {
+        categories: []
+    }
 });
 
 const validateType = {
@@ -152,8 +163,9 @@ const [image, imageAttr] = defineField("image", validateType)
 const [sub, subAttr] = defineField("sub", validateType)
 const [name, nameAttr] = defineField("name", validateType)
 const [weight, weightAttr] = defineField("weight", validateType)
-const [available, availableAttr] = defineField("available", validateType)
+const [stock, stockAttr] = defineField("stock", validateType)
 const [published, publishedAttr] = defineField("published", validateType)
+const [categories, categoriesAttr] = defineField("categories", validateType)
 const [price, priceAttr] = defineField("price", validateType)
 const [description, descriptionAttr] = defineField("description", validateType)
 
@@ -161,15 +173,18 @@ const pending = ref(false);
 const preview = ref(false);
 
 const { data: product, pending: pendingProduct, error, refresh } = await getProduct(id);
+const { data: productCategories, pending: pendingCategories, error: errorCateories, refresh: refreshCategories } = await getCategories();
 
 watch(product, val => {
     if (val) {
+        console.log(val)
         image.value = val.image
         name.value = val.name
         sub.value = val.sub
         weight.value = val.weight
-        available.value = val.available
+        stock.value = val.stock
         published.value = val.published
+        categories.value = val.categoryIds
         price.value = val.price
         description.value = val.description
     }
@@ -195,8 +210,11 @@ const handlePost = async () => {
     fd.append("name", name.value);
     fd.append("sub", sub.value);
     fd.append("weight", weight.value);
-    fd.append("available", available.value);
+    fd.append("stock", stock.value);
     fd.append("published", published.value);
+    for (let x of categories.value) {
+        fd.append("categories[]", x);
+    }
     fd.append("price", price.value);
     fd.append("description", description.value);
 

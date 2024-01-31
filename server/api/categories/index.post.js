@@ -1,5 +1,5 @@
 import prisma from "~/server/db";
-import { object, string, number, boolean } from "yup";
+import { object, string } from "yup";
 
 export default defineEventHandler(async e => {
     const body = await readForm(e);

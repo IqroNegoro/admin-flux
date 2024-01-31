@@ -1,15 +1,16 @@
 <template>
     <div>
         <div class="flex justify-between">
-            <h1 class="text-primary text-2xl font-medium">Products</h1>
+            <div v-if="pendingCategory" class="skeleton h-8 w-64"></div>
+            <h1 v-else class="text-primary text-2xl font-medium">{{category.name}} Products</h1>
             <div class="flex gap-2 flex-row">
-                <button @click="products.pagination?.prev ? page-- : null" class="disabled:text-gray-500 disabled:cursor-not-allowed px-2 flex justify-center items-center border border-primary rounded-md hover:bg-primary hover:text-white transition-colors duration-150" :disabled="pending || !products.pagination?.prev">
+                <button @click="products.pagination?.prev ? page-- : null" class="disabled:text-gray-500 disabled:cursor-not-allowed px-2 flex justify-center items-center border border-primary rounded-md hover:bg-primary hover:text-white transition-colors duration-150" :disabled="pendingProducts || !products.pagination?.prev">
                     <i class="bx bx-chevron-left"></i>
                 </button>
                 <p class="flex justify-center items-center">
                     {{ page }}
                 </p>
-                <button @click="products.pagination?.next ? page++ : null" class="disabled:text-gray-500 disabled:cursor-not-allowed px-2 flex justify-center items-center border border-primary rounded-md hover:bg-primary hover:text-white transition-colors duration-150" :disabled="pending || !products.pagination?.next">
+                <button @click="products.pagination?.next ? page++ : null" class="disabled:text-gray-500 disabled:cursor-not-allowed px-2 flex justify-center items-center border border-primary rounded-md hover:bg-primary hover:text-white transition-colors duration-150" :disabled="pendingProducts || !products.pagination?.next">
                     <i class="bx bx-chevron-right"></i>
                 </button>
                 <div class="flex flex-row rounded-md">
@@ -18,13 +19,10 @@
                         <i class="bx bx-search"></i>
                     </button>
                 </div>
-                <button class="px-2 flex justify-center items-center border border-primary rounded-md hover:bg-primary hover:text-white transition-colors duration-150" @click="addStatus = true">
-                    <i class="bx bx-plus"></i>
-                </button>
             </div>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-flow-row my-2 gap-4">
-            <template v-if="pending">
+            <template v-if="pendingProducts">
                 <ProductSkeleton v-for="i in 8" :key="i" />
             </template>
             <template v-else>
@@ -32,15 +30,17 @@
             </template>
         </div>
         <LazyProductEdit v-if="editStatus" :id="editStatus" @edit-product="product => products.data.splice(products.data.findIndex(v => v.id == product.id), 1, product)" @close-edit-product="editStatus = null" />
-        <LazyProductAdd v-if="addStatus" @add-product="product => products.data.push(product)" @close-add-product="addStatus = false" />
     </div>
 </template>
 <script setup>
+const { id } = useRoute().params
 const limit = ref(10);
 const page = ref(1);
 const q = ref("");
 
-const { data: products, pending, error, refresh } = await getProducts({
+const { data: category, pending: pendingCategory, error: errorCategory, refresh: refreshCategory } = await getCategory(id);
+
+const { data: products, pending: pendingProducts, error: errorProducts, refresh: refreshProducts } = await getProductsByCategory(id, {
     params: {
         limit,
         page,
@@ -52,7 +52,6 @@ watch(q, val => {
     page.value = 1;
 })
 
-const addStatus = ref(false);
 const editStatus = ref(null);
 
 watch(products, val => {

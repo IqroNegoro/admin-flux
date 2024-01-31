@@ -27,7 +27,8 @@ model users {
 model categories {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   name String
-  products products[]
+  productIds String[] @db.ObjectId
+  products products[] @relation(fields: [productIds], references: [id]) // many to many
 
   @@index(fields: [name])
 }
@@ -38,18 +39,18 @@ model products {
   sub String
   image String
   weight Int
-  available Boolean @default(false)
+  stock Int? @default(0)
   published Boolean @default(false)
   price Int? @default(0)
   description String
-  categories categories @relation(fields: [categoryId], references: [id])
-  categoryId String @db.ObjectId
+  categoryIds String[] @db.ObjectId
+  categories categories[] @relation(fields: [categoryIds], references: [id])
   carts carts[]
   // orders orders[]
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  @@index(fields: [name, categoryId])
+  @@index(fields: [name])
 }
 
 model carts {
@@ -112,6 +113,7 @@ enum Status {
   CANCEL
   CREATED
   PENDING
+  SHIP
   SUCCESS
 }
 
@@ -123,7 +125,7 @@ type ProductsTransaction {
   price Int @default(0)
   quantity Int @default(0)
   description String?
-  categories Category
+  categories Category[]
 }
 
 type Category {

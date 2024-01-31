@@ -11,13 +11,12 @@ export const getProduct = async id => await useApi(`products/${id}`, {
     key: `get-${id}-product`
 });
 
-export const searchProducts = async options => await useApi(`products/search`, {
+export const getProductsByCategory = async (id, options) => await useApi(`categories/${id}/products`, {
     ...options,
-    default: () => [],
     lazy: true,
-    immediate: false,
-    key: `search-products`
-});
+    default: () => [],
+    key: `get-${id}-category-products`
+})
 
 export const createProduct = async body => await useApi("products", {
     method: "POST",

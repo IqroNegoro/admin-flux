@@ -14,6 +14,7 @@ export default defineEventHandler(async e => {
     });
 
     const body = await readForm(e);
+    
     const data = await object({
         name: string().required("Please fill the category name").trim()
     }).validate(body, {abortEarly: false}).catch(err => {

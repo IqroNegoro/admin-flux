@@ -23,7 +23,7 @@ export default defineEventHandler(async e => {
         name: string().required("Please fill the product name").trim(),
         sub: string().required("Please fill the product sub text").trim(),
         weight: number().typeError("Please fill stock the product").required("Please fill weight of product").min(0),
-        available: boolean().default(false),
+        stock: number().typeError("Please fill stock the product").required("Please fill weight of product").min(0),
         published: boolean().default(false),
         price: number().typeError("Please fill price the product").required("Please fill price the product").min(0).max(99999999, max => `Price must less then or equal to ${formatRp(max.max)}`),
         description: string().nullable().ensure().trim()
@@ -54,9 +54,15 @@ export default defineEventHandler(async e => {
         data.image = firstImages.url
     }
 
+    const categoryIds = data.categories
+    delete data.categories;
+
     const product = await prisma.products.update({
         where: {id},
-        data
+        data: {
+            ...data,
+            categoryIds
+        }
     });
 
     product.description = unescape(product.description)

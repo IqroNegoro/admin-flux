@@ -1,7 +1,7 @@
 export const getCategories = async options => await useApi(`categories`, {
     ...options,
     lazy: true,
-    default: () => [],
+    default: () => {},
     key: "get-categories"
 });
 
@@ -16,14 +16,6 @@ export const createCategory = async body => await useApi(`categories`, {
     body,
     key: "post-categories"
 });
-
-export const searchCategories = async options => await useApi(`categories/search`, {
-    ...options,
-    lazy: true,
-    default: () => [],
-    immediate: false,
-    key: "search-categories"
-})
 
 export const updateCategory = async (id, body) => await useApi(`categories/${id}`, {
     method: "PUT",

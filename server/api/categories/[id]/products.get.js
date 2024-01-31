@@ -2,6 +2,7 @@ import prisma from "~/server/db";
 import unescape from "validator/lib/unescape.js";
 
 export default defineEventHandler(async e => {
+    const { id } = getRouterParams(e);
     const { q, page, limit } = getQuery(e);
 
     const query = unescape(q);
@@ -11,10 +12,10 @@ export default defineEventHandler(async e => {
             name: {
                 contains: query,
                 mode: 'insensitive'
+            },
+            categoryIds: {
+                has: id
             }
-        },
-        include: {
-            categories: true
         },
         skip: (+limit || 0) * ((+page || 1) - 1),
         take: (+limit || 10) + 1
@@ -27,8 +28,6 @@ export default defineEventHandler(async e => {
             prev: page > 1
         }
     }
-
-    console.log(result)
     
     return result;
 });

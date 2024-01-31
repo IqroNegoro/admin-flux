@@ -57,7 +57,6 @@
     select {
         appearance: none;
         box-shadow: none;
-        display: none;
     }
 
     th, td {
