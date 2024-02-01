@@ -1,6 +1,6 @@
 <template>
     <div class="rounded-md shadow-md cursor-pointer flex flex-col">
-        <div class="bg-black/25 rounded-md h-64 mx-auto w-48 animate-pulse"></div>
+        <div class="bg-black/25 rounded-md h-48 md:h-64 mx-auto w-full md:w-48 animate-pulse"></div>
         <div class="p-2 bg-grey-100 flex flex-col gap-1">
             <p class="skeleton h-4 w-full"></p>
             <p class="text-gray-500 w-16 h-4 skeleton"></p>

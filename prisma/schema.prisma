@@ -26,11 +26,11 @@ model users {
 
 model categories {
   id String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
+  name String @unique
   productIds String[] @db.ObjectId
   products products[] @relation(fields: [productIds], references: [id]) // many to many
-
-  @@index(fields: [name])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model products {

@@ -90,7 +90,7 @@
                                 {{ productCategories?.data.find(v => v.id == category).name }}
                             </button>
                         </div>
-                        <p v-if="errors.category" class="text-red-500 text-sm"> {{ errors.category }} </p>
+                        <p v-if="errors.categories" class="text-red-500 text-sm"> {{ errors.categories }} </p>
                     </div>
                     <div class="w-full flex flex-col gap-1 col-[1/-1]">
                         <p class="font-medium">Product Description</p>

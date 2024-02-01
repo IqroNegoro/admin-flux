@@ -33,7 +33,11 @@ export default defineEventHandler(async e => {
         where: {
             id
         },
-        data
+        data,
+        select: {
+            id: true,
+            name: true
+        }
     });
 
     return category;

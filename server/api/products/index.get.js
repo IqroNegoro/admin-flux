@@ -13,9 +13,6 @@ export default defineEventHandler(async e => {
                 mode: 'insensitive'
             }
         },
-        include: {
-            categories: true
-        },
         skip: (+limit || 0) * ((+page || 1) - 1),
         take: (+limit || 10) + 1
     });

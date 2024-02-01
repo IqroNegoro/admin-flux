@@ -76,7 +76,7 @@
     }
 
     .unactive p, .active p {
-        @apply transition-opacity duration-300
+        @apply transition-opacity duration-500
     }
     
     .unactive p {

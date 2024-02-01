@@ -1,6 +1,7 @@
-export const getOrders = async () => await useApi(`orders`, {
+export const getOrders = async options => await useApi(`orders`, {
+    ...options,
     lazy: true,
-    default: () => [],
+    default: () => {},
     key: "get-orders"
 });
 

@@ -66,9 +66,9 @@ const handlePost = async () => {
 
     if (error.value) {
         if (error.value.statusCode === 400) {
-            notification.error("Something went wrong when creating category");
             setErrors(error.value.data.data);
         }
+        notification.error(error.value.data.message);
         return;
     }
 

@@ -22,6 +22,10 @@ export default defineEventHandler(async e => {
                 mode: "insensitive"
             }
         },
+        select: {
+            id: true,
+            name: true
+        },
         ...option
     });
 

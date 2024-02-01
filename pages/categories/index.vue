@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="flex justify-between">
+        <div class="flex justify-between max-md:flex-col max-md:gap-2">
             <h1 class="text-primary text-2xl font-medium">Categories</h1>
             <div class="flex gap-2 flex-row">
                 <button @click="categories.pagination?.prev ? page-- : null" class="disabled:text-gray-500 disabled:cursor-not-allowed px-2 flex justify-center items-center border border-primary rounded-md hover:bg-primary hover:text-white transition-colors duration-150" :disabled="pending || !categories.pagination?.prev">
@@ -13,7 +13,7 @@
                     <i class="bx bx-chevron-right"></i>
                 </button>
                 <div class="flex flex-row rounded-md">
-                    <input type="text" class="border rounded-l-md" placeholder="Search categories" v-model="q">
+                    <input type="text" class="border rounded-l-md w-full" placeholder="Search categories" v-model="q">
                     <button class="px-3 h-full bg-primary text-white flex justify-center items-center rounded-r-md">
                         <i class="bx bx-search"></i>
                     </button>
@@ -23,8 +23,8 @@
                 </button>
             </div>
         </div>
-        <div class="w-full shadow-md rounded-md">
-            <table class="table-fixed w-full">
+        <div class="w-full shadow-md rounded-md overflow-x-auto\">
+            <table class="table-auto w-full">
                 <thead>
                     <tr>
                         <th>No</th>

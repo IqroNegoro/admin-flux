@@ -15,6 +15,10 @@ export default defineEventHandler(async e => {
     const category = await prisma.categories.findUnique({
         where: {
             id
+        },
+        select: {
+            id: true,
+            name: true
         }
     });
 

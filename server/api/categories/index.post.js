@@ -1,5 +1,6 @@
 import prisma from "~/server/db";
 import { object, string } from "yup";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 export default defineEventHandler(async e => {
     const body = await readForm(e);
@@ -19,7 +20,24 @@ export default defineEventHandler(async e => {
     });
 
     const category = await prisma.categories.create({
-        data: body
+        data: body,
+        select: {
+            id: true,
+            name: true
+        }
+    }).catch(err => {
+        let message = "Something went wrong when creating category";
+
+        if (err instanceof PrismaClientKnownRequestError) {
+            if (err.code === 'P2002') {
+                message = "Category has already created"
+            }
+        }
+        
+        throw createError({
+            statusCode: 500,
+            message
+        })
     });
 
     setResponseStatus(e, 201)

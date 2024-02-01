@@ -11,31 +11,32 @@ export default defineEventHandler(async e => {
             id: "The ID is not valid"
         }
     })
-    
-    const category = await prisma.categories.delete({
-        where: {
-            id
-        }
-    });
 
-    const products = await prisma.$runCommandRaw({
-        update: "products",
-        updates: [{
-            q: {
-                categoryIds: {
-                    $oid: id
-                }
-            },
-            u: {
-                $pull: {
+    const [category, products] = await prisma.$transaction([
+        prisma.categories.delete({
+            where: {
+                id
+            }
+        }),
+        prisma.$runCommandRaw({
+            update: "products",
+            updates: [{
+                q: {
                     categoryIds: {
                         $oid: id
                     }
-                }
-            },
-            multi: true
-        }]
-    })
-
+                },
+                u: {
+                    $pull: {
+                        categoryIds: {
+                            $oid: id
+                        }
+                    }
+                },
+                multi: true
+            }]
+        })
+    ])
+    
     return category;
 })
