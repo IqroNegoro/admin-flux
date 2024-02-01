@@ -1,6 +1,6 @@
 import prisma from "~/server/db";
 import { object, string } from "yup";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library.js";
 
 export default defineEventHandler(async e => {
     const body = await readForm(e);

@@ -1,9 +1,11 @@
 export const getProducts = async options => await useApi("products", {
     ...options,
-    default: () => [],
+    default: () => {},
     lazy: true,
     key: "get-products",
 });
+
+// filtering di orders, products dropdown
 
 export const getProduct = async id => await useApi(`products/${id}`, {
     default: () => {},
