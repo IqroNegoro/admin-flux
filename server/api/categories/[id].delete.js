@@ -17,20 +17,25 @@ export default defineEventHandler(async e => {
             id
         }
     });
-    console.log(category)
-    const products = await prisma.products.update({
-        where: {
-            categoryIds: {
-                has: id
-            }
-        },
-        //pull categories from products
-        data: {
-            pull: {
-                categoryIds: id
-            }
-        }
-    });
+
+    const products = await prisma.$runCommandRaw({
+        update: "products",
+        updates: [{
+            q: {
+                categoryIds: {
+                    $oid: id
+                }
+            },
+            u: {
+                $pull: {
+                    categoryIds: {
+                        $oid: id
+                    }
+                }
+            },
+            multi: true
+        }]
+    })
 
     return category;
 })
