@@ -54,6 +54,8 @@
                 <h1 class="text-xl font-medium">Order Detail</h1>
                 <p class="font-medium">ID</p>
                 <p class="text-sm"> {{ order.orderId }} </p>
+                <p class="font-medium">Customer</p>
+                <p class="text-sm">{{ order.user.name }}</p>
                 <p class="font-medium">Total</p>
                 <p class="text-sm"> {{ formatRp(order.total) }} </p>
                 <p class="font-medium">Status</p>

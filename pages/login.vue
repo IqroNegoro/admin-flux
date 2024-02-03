@@ -41,8 +41,8 @@ const { values, defineField, errors, setErrors, validate } = useForm({
         password: string().required("Password required")
     })),
     initialValues: {
-        email: "iqronegoro0@gmail.com",
-        password: "iqro"
+        email: "admin@gmail.com",
+        password: "admin"
     },
 });
 

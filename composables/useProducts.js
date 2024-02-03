@@ -5,8 +5,6 @@ export const getProducts = async options => await useApi("products", {
     key: "get-products",
 });
 
-// filtering di orders, products dropdown
-
 export const getProduct = async id => await useApi(`products/${id}`, {
     default: () => {},
     lazy: true,

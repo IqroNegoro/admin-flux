@@ -1,5 +1,5 @@
 import prisma from "~/server/db";
-import { Status } from "@prisma/client";
+
 export default defineEventHandler(async e => {
     const date = new Date();
     const year = date.getFullYear();

@@ -15,6 +15,9 @@ export default defineEventHandler(async e => {
     const order = await prisma.transactions.findUnique({
         where: {
             id
+        },
+        include: {
+            user: true
         }
     });
 

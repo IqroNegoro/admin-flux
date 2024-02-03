@@ -23,7 +23,7 @@
                 </button>
             </div>
         </div>
-        <div class="gap-4" :class="{'flex justify-center items-center': error || !products.data.length, 'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-flow-row my-2': !error && products.data.length}">
+        <div class="gap-4" :class="{'flex justify-center items-center': error || !products?.data.length, 'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-flow-row my-2': !error && products?.data.length}">
             <template v-if="pending">
                 <ProductSkeleton v-for="i in 8" :key="i" />
             </template>
@@ -31,7 +31,7 @@
                 <p>Something wrong</p>
                 <button class="px-3 py-1 bg-primary font-medium text-white" @click="refresh">Refresh</button>
             </div>
-            <div v-else-if="!products.data.length" class="borderflex justify-center items-center flex-col gap-4">
+            <div v-else-if="!products?.data.length" class="borderflex justify-center items-center flex-col gap-4">
                 <p>0 Transactions</p>
             </div>
             <template v-else>
