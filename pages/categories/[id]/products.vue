@@ -2,7 +2,7 @@
     <div>
         <div class="flex justify-between">
             <div v-if="pendingCategory" class="skeleton h-8 w-64"></div>
-            <h1 v-else class="text-primary text-2xl font-medium">{{category?.name}} Products</h1>
+            <h1 v-else class="text-primary text-2xl font-medium">{{category?.name ?? ""}} Products</h1>
             <div class="flex gap-2 flex-row">
                 <button @click="products?.pagination?.prev ? page-- : null" class="disabled:text-gray-500 disabled:cursor-not-allowed px-2 flex justify-center items-center border border-primary rounded-md hover:bg-primary hover:text-white transition-colors duration-150" :disabled="pendingProducts || !products?.pagination?.prev">
                     <i class="bx bx-chevron-left"></i>
