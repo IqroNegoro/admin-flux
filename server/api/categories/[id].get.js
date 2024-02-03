@@ -1,4 +1,4 @@
-import isMongoId from "validator/lib/isMongoId";
+import isMongoId from "validator/lib/isMongoId.js";
 import prisma from "~/server/db";
 
 export default defineEventHandler(async e => {
