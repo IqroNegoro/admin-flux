@@ -18,6 +18,7 @@ model users {
   tokens tokens?
   carts carts[]
   transactions transactions[]
+  ratings ratings[]
   // orders orders[]
   roles Roles @default(USER)
   createdAt DateTime @default(now())
@@ -42,15 +43,30 @@ model products {
   stock Int? @default(0)
   published Boolean @default(false)
   price Int? @default(0)
-  description String
+  description String @default("Product doesn't have description")
   categoryIds String[] @db.ObjectId
   categories categories[] @relation(fields: [categoryIds], references: [id])
+  ratings ratings[]
   carts carts[]
   // orders orders[]
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
   @@index(fields: [name])
+}
+
+model ratings {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  user users @relation(fields: [userId], references: [id])
+  productId String @db.ObjectId
+  product products @relation(fields: [productId], references: [id])
+  content String
+  rate Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index(fields: [rate, productId])
 }
 
 model carts {
@@ -62,6 +78,8 @@ model carts {
   quantity Int
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+
+  @@unique([productId, userId])
 }
 
 // model orders {
@@ -78,8 +96,6 @@ model carts {
 
 model transactions {
  id String @id @default(auto()) @map("_id") @db.ObjectId
-  // orderId String  @db.ObjectId
-  // order orders[]
   orderId String @unique
   userId String @db.ObjectId
   user users @relation(fields: [userId], references: [id])
@@ -113,6 +129,7 @@ enum Status {
   CANCEL
   CREATED
   PENDING
+  CONFIRMED
   SHIP
   SUCCESS
 }
@@ -124,8 +141,9 @@ type ProductsTransaction {
   name String
   price Int @default(0)
   quantity Int @default(0)
-  description String?
+  description String? @default("Product doesn't have description")
   categories Category[]
+  isRated Boolean @default(false)
 }
 
 type Category {

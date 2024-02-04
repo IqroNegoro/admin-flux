@@ -10,16 +10,18 @@
         </td>
         <td>
             <div class="group relative w-24 mx-auto text-white font-light">
-                <button class="w-24 px-2 py-1" :class="{'bg-red-500': transaction.status == 'CANCEL', 'bg-blue-500': transaction.status == 'CREATED', 'bg-primary': transaction.status == 'PENDING', 'bg-green-500': transaction.status == 'SUCCESS'}">
+                <button class="w-24 px-2 py-1" :class="{'bg-red-500': transaction.status == 'CANCEL', 'bg-blue-500': transaction.status == 'CREATED', 'bg-primary': transaction.status == 'PENDING', 'bg-gray-500': transaction.status == 'CONFIRMED', 'bg-yellow-500': transaction.status ==  'SHIP', 'bg-green-500': transaction.status == 'SUCCESS'}">
                     <i v-if="pendingStatus" class="bx bx-loader-alt bx-spin"></i>
                     <template v-else>
-                        {{ transaction.status == 'CANCEL' ? 'CANCEL' : transaction.status == 'CREATED' ? 'CREATED' : transaction.status == 'PENDING' ? 'PENDING' : 'SUCCESS' }}
+                        {{ transaction.status == 'CANCEL' ? 'CANCEL' : transaction.status == 'CREATED' ? 'CREATED' : transaction.status == 'PENDING' ? 'PENDING' : transaction.status == 'CONFIRMED' ? 'CONFIRMED' : transaction.status == 'SHIP' ? 'SHIP' : 'SUCCESS' }}
                     </template>
                 </button>
                 <div class="group-focus-within:flex hidden z-50 absolute left-1/2 -translate-x-1/2 top-full flex-col w-full">
                     <button @click="handlingUpdateStatus(transaction.id, 'CANCEL')" v-if="transaction.status != 'CANCEL'" class="bg-red-500 w-24 px-2 py-1">CANCEL</button>
                     <button @click="handlingUpdateStatus(transaction.id, 'CREATED')" v-if="transaction.status != 'CREATED'" class="bg-blue-500 w-24 px-2 py-1">CREATED</button>
                     <button @click="handlingUpdateStatus(transaction.id, 'PENDING')" v-if="transaction.status != 'PENDING'" class="bg-primary w-24 px-2 py-1">PENDING</button>
+                    <button @click="handlingUpdateStatus(transaction.id, 'CONFIRMED')" v-if="transaction.status != 'CONFIRMED'" class="bg-gray-500 w-24 px-2 py-1">CONFIRMED</button>
+                    <button @click="handlingUpdateStatus(transaction.id, 'SHIP')" v-if="transaction.status != 'SHIP'" class="bg-yellow-500 w-24 px-2 py-1">SHIP</button>
                     <button @click="handlingUpdateStatus(transaction.id, 'SUCCESS')" v-if="transaction.status != 'SUCCESS'" class="peer bg-green-500 w-24 py-1"> SUCCESS </button>
                 </div>
             </div>
