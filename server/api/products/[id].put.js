@@ -18,8 +18,6 @@ export default defineEventHandler(async e => {
 
     let body = await readFile(e);
 
-    console.log(body);
-
     let data = await object({
         newImages: array().nullable(),
         images: array().typeError("Please put the product image"),
@@ -48,7 +46,6 @@ export default defineEventHandler(async e => {
         const channel = client.channels.cache.get(config.channelId);
         for (let image in data.newImages) {
             if (!data.newImages[image]) continue;
-            console.log(data.newImages[image], "imageeee")
             let attachment = new AttachmentBuilder(data.newImages[image].data).setName(data.newImages[image].filename).setDescription(data.newImages[image].filename);
             let sending = await channel.send({
                 content: `${new Date().getDate()}-${new Date().getMonth() + 1}-${new Date().getFullYear()}, ${e.context.auth.name}`,

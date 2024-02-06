@@ -13,8 +13,6 @@ export default defineEventHandler(async e => {
     
     const body = await readForm(e);
 
-    console.log(body);
-
     const transaction = await prisma.transactions.update({
         where: {
             id
@@ -25,8 +23,6 @@ export default defineEventHandler(async e => {
             status: true
         }
     });
-
-    console.log(transaction)
 
     return transaction;
 })

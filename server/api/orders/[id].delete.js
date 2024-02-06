@@ -20,6 +20,6 @@ export default defineEventHandler(async e => {
             id: true
         }
     });
-    console.log(order)
+
     return order;
 })

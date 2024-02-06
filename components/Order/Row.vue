@@ -57,8 +57,6 @@ const handlingUpdateStatus = async (id, status) => {
 
     pendingStatus.value = false;
 
-    console.log(data.value, error.value);
-
     if (error.value) return;
 
     emit("updateStatus", data.value);

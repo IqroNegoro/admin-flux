@@ -15,6 +15,5 @@
 </template>
 <script setup>
 const { product } = defineProps(["product"]);
-console.log(product)
 const emits = defineEmits(["closePreview"]);
 </script>

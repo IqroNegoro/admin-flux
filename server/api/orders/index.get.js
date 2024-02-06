@@ -49,7 +49,5 @@ export default defineEventHandler(async e => {
         }
     }
 
-    console.log(result)
-    
     return result;
 })
