@@ -13,11 +13,6 @@ export default defineEventHandler(async e => {
     })
 
     const [category, products] = await prisma.$transaction([
-        prisma.categories.delete({
-            where: {
-                id
-            }
-        }),
         prisma.$runCommandRaw({
             update: "products",
             updates: [{

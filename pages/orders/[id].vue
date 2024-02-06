@@ -7,7 +7,7 @@
             </div>
             <div class="flex flex-col gap-4 w-full">
                 <div class="w-full rounded-full h-4 bg-black/10">
-                    <div class="bg-primary h-4 rounded-full" :class="{'w-[25%]': order.status === 'CREATED', 'w-[50%]': order.status === 'PENDING', 'w-[75%]': order.status === 'CONFIRMED', 'w-full': order.status === 'SUCCESS'}"></div>
+                    <div class="bg-primary h-4 rounded-full" :class="{ 'w-[25%]': order.status === 'CREATED', 'w-[50%]': order.status === 'PENDING', 'w-[75%]': order.status === 'CONFIRMED', 'w-full': order.status === 'SUCCESS' || order.status === 'SHIP' || order.status == 'CANCEL' }"></div>
                 </div>
                 <div class="flex flex-row justify-between items-center">
                     <div class="flex flex-col gap-2 justify-center items-center">
@@ -18,29 +18,50 @@
                         </div>
                         <p class="max-md:text-xs font-medium">Created</p>
                     </div>
-                    <div class="flex flex-col gap-2 justify-center items-center">
+                    <template v-if="order.status != 'CANCEL' && order.status != 'SUCCESS'">
+                        <div class="flex flex-col gap-2 justify-center items-center">
+                            <div
+                                class="bg-primary p-2 rounded-md w-min hover:-translate-y-2 duration-150 transition-transform">
+                                <div class="rounded-full p-1 flex justify-center items-center bg-white">
+                                    <i class="bx bx-check-double"></i>
+                                </div>
+                            </div>
+                            <p class="max-md:text-xs font-medium">Paided</p>
+                        </div>
+                        <div class="flex flex-col gap-2 justify-center items-center">
+                            <div
+                                class="bg-primary p-2 rounded-md w-min hover:-translate-y-2 duration-150 transition-transform">
+                                <div class="rounded-full p-1 flex justify-center items-center bg-white">
+                                    <i class="bx bx-package"></i>
+                                </div>
+                            </div>
+                            <p class="max-md:text-xs font-medium">Processed</p>
+                        </div>
+                        <div class="flex flex-col gap-2 justify-center items-center">
+                            <div
+                                class="bg-primary p-2 rounded-md w-min hover:-translate-y-2 duration-150 transition-transform">
+                                <div class="rounded-full p-1 flex justify-center items-center bg-white">
+                                    <i class="bx bxs-ship"></i>
+                                </div>
+                            </div>
+                            <p class="max-md:text-xs font-medium">Shipped</p>
+                        </div>
+                    </template>
+                    <div v-else-if="order.status === 'SUCCESS'" class="flex flex-col gap-2 justify-center items-center">
                         <div class="bg-primary p-2 rounded-md w-min hover:-translate-y-2 duration-150 transition-transform">
                             <div class="rounded-full p-1 flex justify-center items-center bg-white">
-                                <i class="bx bx-check-double"></i>
+                                <i class='bx bxs-checkbox-checked'></i>
                             </div>
                         </div>
-                        <p class="max-md:text-xs font-medium">Paided</p>
+                        <p class="max-md:text-xs font-medium">Success</p>
                     </div>
-                    <div class="flex flex-col gap-2 justify-center items-center">
+                    <div v-else class="flex flex-col gap-2 justify-center items-center">
                         <div class="bg-primary p-2 rounded-md w-min hover:-translate-y-2 duration-150 transition-transform">
                             <div class="rounded-full p-1 flex justify-center items-center bg-white">
-                                <i class="bx bx-package"></i>
+                                <i class="bx bx-x"></i>
                             </div>
                         </div>
-                        <p class="max-md:text-xs font-medium">Processed</p>
-                    </div>
-                    <div class="flex flex-col gap-2 justify-center items-center">
-                        <div class="bg-primary p-2 rounded-md w-min hover:-translate-y-2 duration-150 transition-transform">
-                            <div class="rounded-full p-1 flex justify-center items-center bg-white">
-                                <i class="bx bxs-ship"></i>
-                            </div>
-                        </div>
-                        <p class="max-md:text-xs font-medium">Shipped</p>
+                        <p class="max-md:text-xs font-medium">Cancel</p>
                     </div>
                 </div>
             </div>
@@ -64,19 +85,23 @@
                 </p>
                 <p class="font-medium">Method</p>
                 <p class="text-sm"> {{ pascal(order.method) }} </p>
+                <p class="font-medium">Paid before</p>
+                <p class="text-sm"> {{ moment(order.midtransResponse.expiry_time).format("D MMMM YYYY, hh:mm:ss A") }} </p>
                 <template v-if="order.method === 'bank_transfer'">
                     <template v-if="order.paymentStatus != 'settlement'">
                         <p class="font-medium">Bank</p>
                         <p class="text-sm"> {{ capitalize(order.midtransResponse.va_numbers[0].bank) }} </p>
                         <p class="font-medium">VA Number</p>
                         <p class="text-sm"> {{ order.midtransResponse.va_numbers[0].va_number }} </p>
-                        <p class="font-medium">Paid before</p>
-                        <p class="text-sm"> {{ moment(order.midtransResponse.expiry_time).format("D MMMM YYYY, hh:mm:ss A") }} </p>
                     </template>
                 </template>
                 <template v-else>
                     <p class="font-medium">QR</p>
                     <p class="text-sm"> {{ order.midtransResponse.actions[0].url }} (sandbox) </p>
+                    <img :src="order.midtransResponse.actions[0].url" alt="">
+                    <!-- <NuxtLink external="true" target="_blank" :to="order.midtransResponse.actions[1].url" class="flex flex-row border border-primary justify-center items-center py-2">
+                        Pay at <img src="/images/gojek.png" alt="" class="w-24">
+                    </NuxtLink> -->
                 </template>
             </div>
             <div class="flex flex-col gap-1">

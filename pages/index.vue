@@ -12,11 +12,25 @@
                         <i v-else class="bx bx-refresh"></i>
                     </button>
                 </div>
-                <div class="w-full">
-                    <ClientOnly>
-                        <VueApexCharts type="area" :options="options" :series="series" />
-                    </ClientOnly>
+                <div class="w-full flex flex-row gap-4">
+                    <div class="p-4 w-max flex flex-col gap-2 shadow-lg rounded-md">
+                        <div class="flex justify-between items-center gap-8">
+                            <h1 class="font-medium text-xl">Rp {{ data.rate }}</h1>
+                            <i class="bx bx-dollar text-2xl"></i>
+                        </div>
+                        <p class="text-sm font-medium">Rate</p>
+                    </div>
+                    <div class="p-4 w-max flex flex-col gap-2 shadow-lg rounded-md">
+                        <div class="flex justify-between items-center gap-8">
+                            <h1 class="font-medium text-xl">{{ data.totalOrders }}</h1>
+                            <i class="bx bx-package text-2xl"></i>
+                        </div>
+                        <p class="text-sm font-medium">Order success at this month</p>
+                    </div>
                 </div>
+                <!-- <ClientOnly>
+                    <VueApexCharts type="area" :options="options" :series="series" />
+                </ClientOnly> -->
             </div>
             <div class="w-full">
             </div>
@@ -29,41 +43,41 @@
 <script setup>
 const { data, pending, error, refresh } = await getSalesThisMonth();
 console.log(data.value)
-const options = {
-    chart: {
-        id: 'Sales This Month',
-        zoom: {
-            enabled: true
-        },
-    },
-    dataLabels: {
-        enabled: false
-    },
-    stroke: {
-        curve: 'smooth'
-    },
-    title: {
-        text: "Sales Month"
-    },
-    legend: {
-              horizontalAlign: 'left'
-            },
-    xaxis: {
-        type: 'datetime',
-        categories: data.value?.dates,
-        opposite: true
-    },
-    tooltip: {
-        x: {
-            format: 'dd/MM/yy HH:mm'
-        },
-    },
-}
+// const options = {
+//     chart: {
+//         id: 'Sales This Month',
+//         zoom: {
+//             enabled: true
+//         },
+//     },
+//     dataLabels: {
+//         enabled: false
+//     },
+//     stroke: {
+//         curve: 'smooth'
+//     },
+//     title: {
+//         text: "Sales Month"
+//     },
+//     legend: {
+//               horizontalAlign: 'left'
+//             },
+//     xaxis: {
+//         type: 'datetime',
+//         categories: data.value?.dates,
+//         opposite: true
+//     },
+//     tooltip: {
+//         x: {
+//             format: 'dd/MM/yy HH:mm'
+//         },
+//     },
+// }
 
-const series = [{
-    name: "Sale",
-    data: data.value?.series
-}]
+// const series = [{
+//     name: "Sale",
+//     data: data.value?.series
+// }]
 
 useHead({
     title: "Flux Store Admin"

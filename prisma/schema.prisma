@@ -38,7 +38,7 @@ model products {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   name String
   sub String
-  image String
+  images String[]
   weight Int
   stock Int? @default(0)
   published Boolean @default(false)
@@ -95,7 +95,7 @@ model carts {
 // }
 
 model transactions {
- id String @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
   orderId String @unique
   userId String @db.ObjectId
   user users @relation(fields: [userId], references: [id])
@@ -136,7 +136,7 @@ enum Status {
 
 type ProductsTransaction {
   id String @map("_id") @db.ObjectId
-  image String
+  images String[]
   weight Int
   name String
   price Int @default(0)

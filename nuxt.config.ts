@@ -13,6 +13,7 @@ export default defineNuxtConfig({
   app: {
     pageTransition: { name: 'page', mode: 'out-in', appear: true },
     head: {
+      title: "Flux Store",
       link: [
         {
           rel: 'stylesheet', href: 'https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'
@@ -31,6 +32,7 @@ export default defineNuxtConfig({
     dirs: ['stores']
   },
   tailwindcss: {
-    cssPath: '~/assets/css/tailwind.css'
+    cssPath: '~/assets/css/tailwind.css',
+    viewer: false
   },
 })

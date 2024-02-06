@@ -74,7 +74,7 @@ const handleLogin = async () => {
         return;
     };
 
-    const {data, pending, error} = await login(values);
+    const {data, pending, error} = await login({...values});
     pendingLogin.value = pending.value
 
     if (error.value) {

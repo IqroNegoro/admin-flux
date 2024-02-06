@@ -12,9 +12,21 @@ export default defineEventHandler(async e => {
         }
     });
 
-    const product = await prisma.products.delete({
-        where: {id}
-    });
+    const transactions = await prisma.$transaction([
+        prisma.carts.deleteMany({
+            where: {
+                productId: id
+            }
+        }),
+        prisma.ratings.deleteMany({
+            where: {
+                productId: id
+            }
+        }),
+        prisma.products.deleteMany({
+            where: {id}
+        })
+    ]);
 
-    return {id: product.id}
+    return transactions
 })

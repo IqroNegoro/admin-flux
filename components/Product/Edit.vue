@@ -13,16 +13,32 @@
                     </button>
                 </div>
                 <div class="h-full w-full overflow-y-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 grid-flow-row gap-4 items-center">
-                    <div class="col-[1/-1] flex flex-col justify-center items-center">
-                        <label for="image" class="relative w-48 h-48 rounded-md flex justify-center items-center cursor-pointer" :class="{'bg-black/25': !newImage && !image}">
-                            <button v-if="newImage" @click.prevent="newImage = null" class="absolute top-0 right-0 hover p-1 rounded-full flex justify-center items-center text-white"><i class="bx bx-x"></i></button>
-                            <img v-if="image && !newImage" :src="image" alt="" class="rounded-sm aspect-square object-center object-contain">
-                            <img v-else-if="newImage" :src="renderImage(newImage)" alt="" class="rounded-sm aspect-square object-center object-contain">
-                            <i v-else class="bx bx-camera"></i>
+                    <div class="col-[1/-1] w-96 mx-auto flex flex-col gap-2 cursor-pointer">
+                        <label for="images0" :class="{'bg-black/25': !images[0]}" class="aspect-square col-span-4">
+                            <img v-if="newImages[0]" :src="renderImage(newImages[0])" alt="" class="w-full rounded-sm aspect-square object-center object-cover col-span-4" @click="newImages.splice(0,1, '')" />
+                            <img v-else-if="images[0]" :src="images[0]" alt="" class="w-full rounded-sm aspect-square object-center object-cover col-span-4" @click="images.splice(0,1, '')" />
                         </label>
-                        <p v-if="image === false || errors.image" class="text-red-500 text-sm text-center"> {{ errors.image || "Please put a image" }}</p>
+                        <div class="grid grid-cols-4 grid-rows-2 gap-2 cursor-pointer">
+                            <img v-if="newImages[1]" :src="renderImage(newImages[1])" alt="" class="rounded-sm aspect-square object-center object-cover" @click="newImages.splice(1, 1, '')">
+                            <img v-else-if="images[1]" :src="images[1]" alt="" class="rounded-sm aspect-square object-center object-cover" @click="images.splice(1, 1, '')">
+                            <label v-else for="images1" class="bg-black/25 aspect-square"></label>
+                            <img v-if="newImages[2]" :src="renderImage(newImages[2])" alt="" class="rounded-sm aspect-square object-center object-cover" @click="newImages.splice(2, 1, '')">
+                            <img v-else-if="images[2]" :src="images[2]" alt="" class="rounded-sm aspect-square object-center object-cover" @click="images.splice(2, 1, '')">
+                            <label v-else for="images2" class="bg-black/25 aspect-square"></label>
+                            <img v-if="newImages[3]" :src="renderImage(newImages[3])" alt="" class="rounded-sm aspect-square object-center object-cover" @click="newImages.splice(3, 1, '')">
+                            <img v-else-if="images[3]" :src="images[3]" alt="" class="rounded-sm aspect-square object-center object-cover" @click="images.splice(3, 1, '')">
+                            <label v-else for="images3" class="bg-black/25 aspect-square"></label>
+                            <img v-if="newImages[4]" :src="renderImage(newImages[4])" alt="" class="rounded-sm aspect-square object-center object-cover" @click="newImages.splice(4, 1, '')">
+                            <img v-else-if="images[4]" :src="images[4]" alt="" class="rounded-sm aspect-square object-center object-cover" @click="images.splice(4, 1, '')">
+                            <label v-else for="images4" class="bg-black/25 aspect-square"></label>
+                        </div>
+                        <p v-if="images === false || errors.images" class="text-red-500 text-sm text-center"> {{ errors.images || "Please put a image" }}</p>
                     </div>
-                    <input type="file" id="image" class="hidden" accept=".jpg,.webp,.jpeg,.png" @input="handleInputFile">
+                    <input type="file" id="images0" class="hidden" accept=".jpg,.webp,.jpeg,.png" @input="handleInputFile">
+                    <input type="file" id="images1" class="hidden" accept=".jpg,.webp,.jpeg,.png" @input="handleInputFile">
+                    <input type="file" id="images2" class="hidden" accept=".jpg,.webp,.jpeg,.png" @input="handleInputFile">
+                    <input type="file" id="images3" class="hidden" accept=".jpg,.webp,.jpeg,.png" @input="handleInputFile">
+                    <input type="file" id="images4" class="hidden" accept=".jpg,.webp,.jpeg,.png" @input="handleInputFile">
                     <div class="w-full flex flex-col gap-1">
                         <p class="font-medium">Product Name</p>
                         <input type="text" class="w-full" placeholder="Product Name" v-model="name" :class="{'border border-red-500': errors.name}">
@@ -100,18 +116,15 @@
                     </div>
                 </div>
                 <div class="flex flex-row gap-2">
-                    <!-- <button type="submit" class="w-full text-white hover disabled:cursor-not-allowed py-2" @click="handlePost" :disabled="pending || !(newImage || image) || !name || !stock || !price || !description"> -->
-                    <button type="submit" class="w-full text-white hover disabled:cursor-not-allowed py-2" @click="handlePost" >
+                    <button type="submit" class="w-full text-white hover disabled:cursor-not-allowed py-2" @click="handlePost" :disabled="pending || !(newImages.length || images.length) || !name || !stock || !price || !description">
                         <i v-if="pending" class="bx bx-loader-alt bx-spin"></i>
                         <p v-else>
                             Edit
                         </p>
                     </button>
-                    <!-- <button type="button" class="w-full text-primary hover:text-white hover:bg-primary duration-150 transition-colors border border-primary" @click="preview = true">Preview</button> -->
                 </div>
             </template>
         </form>
-        <!-- <LazyProductPreview v-if="preview" :product="{image, name, stock, price, description}" @close-preview="preview = false" /> -->
     </div>
 </template>
 <script setup>
@@ -135,8 +148,8 @@ const notification = useNotification();
 
 const { values, defineField, errors, setErrors, validate } = useForm({
     validationSchema: toTypedSchema(object({
-        newImage: string().nullable().ensure(),
-        image: string().required("Please put the product image"),
+        newImages: array().min(1, "Please put a photo").max(5, "Photos exceed max").nullable().ensure(),
+        images: array().min(1, "Please put a photo").max(5, "Photos exceed max").required("Please put the product image"),
         name: string().required("Please fill the product name").trim(),
         sub: string().required("Please fill the product sub text").trim(),
         weight: number().typeError("Please fill stock the product").required("Please fill weight of product").min(0),
@@ -147,6 +160,8 @@ const { values, defineField, errors, setErrors, validate } = useForm({
         description: string().nullable().ensure().trim()
     })),
     initialValues: {
+        newImages: ["", "", "", "", ""],
+        images: ["", "", "", "", ""],
         categories: []
     }
 });
@@ -158,8 +173,8 @@ const validateType = {
     validateOnInput: false
 }
 
-const [newImage, newImageAttr] = defineField("newImage", validateType)
-const [image, imageAttr] = defineField("image", validateType)
+const [newImages, newImagesAttr] = defineField("newImages", validateType)
+const [images, imagesAttr] = defineField("images", validateType)
 const [sub, subAttr] = defineField("sub", validateType)
 const [name, nameAttr] = defineField("name", validateType)
 const [weight, weightAttr] = defineField("weight", validateType)
@@ -170,15 +185,13 @@ const [price, priceAttr] = defineField("price", validateType)
 const [description, descriptionAttr] = defineField("description", validateType)
 
 const pending = ref(false);
-const preview = ref(false);
 
 const { data: product, pending: pendingProduct, error, refresh } = await getProduct(id);
 const { data: productCategories, pending: pendingCategories, error: errorCateories, refresh: refreshCategories } = await getCategories();
 
 watch(product, val => {
     if (val) {
-        console.log(val)
-        image.value = val.image
+        images.value = val.images
         name.value = val.name
         sub.value = val.sub
         weight.value = val.weight
@@ -190,8 +203,10 @@ watch(product, val => {
     }
 })
 
-const handleInputFile = (target) => {
-    newImage.value = handleFile(target);
+const handleInputFile = el => {
+    const image = handleFile(el);
+    if (!image) return;
+    newImages.value[el.target.id.at(-1)] = image;
 }
 
 const handlePost = async () => {
@@ -212,14 +227,19 @@ const handlePost = async () => {
     fd.append("weight", weight.value);
     fd.append("stock", stock.value);
     fd.append("published", published.value);
-    for (let x of categories.value) {
-        fd.append("categories[]", x);
-    }
     fd.append("price", price.value);
     fd.append("description", description.value);
+    
+    for (let category of categories.value) {
+        fd.append("categories[]", category);
+    }
+    
+    for (let image of images.value) {
+        fd.append("images[]", image)
+    }
 
-    if (newImage.value) {
-        fd.append("image", newImage.value);
+    for (let image of newImages.value) {
+        fd.append("newImages[]", image);
     }
 
     const {data, error} = await updateProduct(product.value.id, fd);

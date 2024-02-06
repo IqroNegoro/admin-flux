@@ -11,14 +11,27 @@
                 </button>
             </div>
             <div class="h-full w-full overflow-y-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 grid-flow-row gap-4 items-center">
-                <div class="col-[1/-1] flex flex-col justify-center items-center">
-                    <label for="image" class="w-48 h-48 rounded-md flex justify-center items-center cursor-pointer" :class="{'bg-black/25': !image}">
-                        <img v-if="image" :src="renderImage(image)" alt="" class="rounded-sm aspect-square object-center object-contain">
-                        <i v-if="!image" class="bx bx-camera"></i>
+                <div class="col-[1/-1] w-96 mx-auto flex flex-col gap-2 cursor-pointer">
+                    <label for="images0" :class="{'bg-black/25': !images[0]}" class="aspect-square col-span-4">
+                        <img v-if="images[0]" :src="renderImage(images[0])" alt="" class="w-full rounded-sm aspect-square object-center object-cover col-span-4" @click="images.splice(0,1, '')" />
                     </label>
-                    <p v-if="image === false || errors.image" class="text-red-500 text-sm text-center"> {{ errors.image || "Please put a image" }}</p>
+                    <div class="grid grid-cols-4 grid-rows-2 gap-2 cursor-pointer">
+                        <img v-if="images[1]" :src="renderImage(images[1])" alt="" class="rounded-sm aspect-square object-center object-cover" @click="images.splice(1, 1, '')">
+                        <label v-else for="images1" class="bg-black/25 aspect-square"></label>
+                        <img v-if="images[2]" :src="renderImage(images[2])" alt="" class="rounded-sm aspect-square object-center object-cover" @click="images.splice(2, 1, '')">
+                        <label v-else for="images2" class="bg-black/25 aspect-square"></label>
+                        <img v-if="images[3]" :src="renderImage(images[3])" alt="" class="rounded-sm aspect-square object-center object-cover" @click="images.splice(3, 1, '')">
+                        <label v-else for="images3" class="bg-black/25 aspect-square"></label>
+                        <img v-if="images[4]" :src="renderImage(images[4])" alt="" class="rounded-sm aspect-square object-center object-cover" @click="images.splice(4, 1, '')">
+                        <label v-else for="images4" class="bg-black/25 aspect-square"></label>
+                    </div>
+                    <p v-if="images === false || errors.images" class="text-red-500 text-sm text-center"> {{ errors.images || "Please put a image" }}</p>
                 </div>
-                <input type="file" id="image" class="hidden" accept=".jpg,.webp,.jpeg,.png" @input="handleInputFile">
+                <input type="file" id="images0" class="hidden" accept=".jpg,.webp,.jpeg,.png" @input="handleInputFile">
+                <input type="file" id="images1" class="hidden" accept=".jpg,.webp,.jpeg,.png" @input="handleInputFile">
+                <input type="file" id="images2" class="hidden" accept=".jpg,.webp,.jpeg,.png" @input="handleInputFile">
+                <input type="file" id="images3" class="hidden" accept=".jpg,.webp,.jpeg,.png" @input="handleInputFile">
+                <input type="file" id="images4" class="hidden" accept=".jpg,.webp,.jpeg,.png" @input="handleInputFile">
                 <div class="w-full flex flex-col gap-1">
                     <p class="font-medium">Product Name</p>
                     <input type="text" class="w-full" placeholder="Product Name" v-model="name" :class="{'border border-red-500': errors.name}">
@@ -86,7 +99,7 @@
                             {{ productCategories.data.find(v => v.id == category).name }}
                         </button>
                     </div>
-                        <p v-if="errors.categories" class="text-red-500 text-sm"> {{ errors.categories }} </p>
+                    <p v-if="errors.categories" class="text-red-500 text-sm"> {{ errors.categories }} </p>
                 </div>
                 <div class="w-full flex flex-col gap-1 col-[1/-1]">
                     <p class="font-medium">Product Description</p>
@@ -106,7 +119,7 @@
                 <button type="button" class="w-full text-primary hover:text-white hover:bg-primary duration-150 transition-colors border border-primary" @click="preview = true">Preview</button>
             </div>
         </form>
-        <LazyProductPreview v-if="preview" :product="{image, name, stock, price, sub}" @close-preview="preview = false" />
+        <LazyProductPreview v-if="preview" :product="{image: images[0], name, stock, price, sub}" @close-preview="preview = false" />
     </div>
 </template>
 <script setup>
@@ -131,17 +144,18 @@ const notification = useNotification();
 
 const { values, defineField, errors, setErrors, validate } = useForm({
     validationSchema: toTypedSchema(object({
-        image: string().required("Please put the product image"),
-        name: string().required("Please fill the product name").trim(),
-        sub: string().required("Please fill the product sub text").trim(),
-        weight: number().typeError("Please fill weight of product").required("Please fill weight of product").min(0),
-        stock: number().typeError("Please fill stock the product").required("Please fill weight of product").min(0),
+        images: array().required("Please put the product image"),
+        name: string().required("Please fill the product name").ensure().trim(),
+        sub: string().required("Please fill the product sub text").ensure().trim(),
+        weight: number().min(0).typeError("Please fill weight of product").required("Please fill weight of product"),
+        stock: number().min(0).typeError("Please fill stock the product").required("Please fill weight of product"),
         published: boolean().default(false),
         categories: array().min(1, "Please select min 1 category of product").required("Please select min 1 category of product"),
-        price: number().typeError("Please fill price the product").required("Please fill price the product").min(0).max(99999999, max => `Price must less then or equal to ${formatRp(max.max)}`),
+        price: number().min(0).typeError("Please fill price the product").required("Please fill price the product").max(99999999, max => `Price must less then or equal to ${formatRp(max.max)}`),
         description: string().nullable().ensure().trim()
     })),
     initialValues: {
+        images: ["","","","",""],
         categories: []
     }
 });
@@ -153,7 +167,7 @@ const validateType = {
     validateOnInput: false
 }
 
-const [image, imageAttr] = defineField("image", validateType)
+const [images, imagesAttr] = defineField("images", validateType)
 const [sub, subAttr] = defineField("sub", validateType)
 const [name, nameAttr] = defineField("name", validateType)
 const [weight, weightAttr] = defineField("weight", validateType)
@@ -166,8 +180,10 @@ const [description, descriptionAttr] = defineField("description", validateType)
 const pending = ref(false);
 const preview = ref(false);
 
-const handleInputFile = (target) => {
-    image.value = handleFile(target);
+const handleInputFile = el => {
+    const image = handleFile(el);
+    if (!image) return;
+    images.value[el.target.id.at(-1, '')] = image;
 }
 
 const handlePost = async () => {
@@ -183,13 +199,15 @@ const handlePost = async () => {
 
     const fd = new FormData();
     fd.append("name", name.value);
-    fd.append("image", image.value);
+    for (let image of images.value.filter(v => v)) {
+        fd.append("images[]", image);
+    }
     fd.append("sub", sub.value);
     fd.append("weight", weight.value);
     fd.append("stock", stock.value);
     fd.append("published", published.value);
-    for (let x of categories.value) {
-        fd.append("categories[]", x);
+    for (let category of categories.value) {
+        fd.append("categories[]", category);
     }
     fd.append("price", price.value);
     fd.append("description", description.value);

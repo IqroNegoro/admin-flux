@@ -3,7 +3,7 @@ import prisma from "~/server/db";
 import { AttachmentBuilder } from "discord.js";
 import isMongoId from "validator/lib/isMongoId.js"
 import unescape from "validator/lib/unescape.js";
-import { object, string, number, boolean } from "yup";
+import { object, string, number, boolean, array } from "yup";
 
 export default defineEventHandler(async e => {
     const {id} = getRouterParams(e, "id");
@@ -18,14 +18,17 @@ export default defineEventHandler(async e => {
 
     let body = await readFile(e);
 
+    console.log(body);
+
     let data = await object({
-        image: object().typeError("Please put the product image"),
-        name: string().required("Please fill the product name").trim(),
-        sub: string().required("Please fill the product sub text").trim(),
-        weight: number().typeError("Please fill stock the product").required("Please fill weight of product").min(0),
-        stock: number().typeError("Please fill stock the product").required("Please fill weight of product").min(0),
+        newImages: array().nullable(),
+        images: array().typeError("Please put the product image"),
+        name: string().required("Please fill the product name").ensure().trim(),
+        sub: string().required("Please fill the product sub text").ensure().trim(),
+        weight: number().min(0).typeError("Please fill stock the product").required("Please fill weight of product"),
+        stock: number().min(0).typeError("Please fill stock the product").required("Please fill weight of product"),
         published: boolean().default(false),
-        price: number().typeError("Please fill price the product").required("Please fill price the product").min(0).max(99999999, max => `Price must less then or equal to ${formatRp(max.max)}`),
+        price: number().min(0).typeError("Please fill price the product").required("Please fill price the product").max(99999999, max => `Price must less then or equal to ${formatRp(max.max)}`),
         description: string().nullable().ensure().trim()
     }).validate(body, {abortEarly: false}).catch(err => {
         let errors = {};
@@ -39,23 +42,31 @@ export default defineEventHandler(async e => {
         })
     })
 
-    if (data.image) {
+    if (data.newImages) {
         const {client} = useNitroApp();
         const config = useRuntimeConfig();
         const channel = client.channels.cache.get(config.channelId);
-        let attachment = new AttachmentBuilder(data.image.data).setName(data.image.filename).setDescription(data.image.filename);
-        let sending = await channel.send({
-            content: `${new Date().getDate()}-${new Date().getMonth() + 1}-${new Date().getFullYear()}, ${e.context.auth.name}`,
-            files: [attachment],
-        }).catch(err => {
-            return err
-        });
-        let [firstImages] = sending.attachments.values();
-        data.image = firstImages.url
+        for (let image in data.newImages) {
+            if (!data.newImages[image]) continue;
+            console.log(data.newImages[image], "imageeee")
+            let attachment = new AttachmentBuilder(data.newImages[image].data).setName(data.newImages[image].filename).setDescription(data.newImages[image].filename);
+            let sending = await channel.send({
+                content: `${new Date().getDate()}-${new Date().getMonth() + 1}-${new Date().getFullYear()}, ${e.context.auth.name}`,
+                files: [attachment],
+            }).catch(err => {
+                return err
+            });
+            let [firstImages] = sending.attachments.values();
+            data.images[image] = firstImages.url
+            // lanjutin update image sesuai index
+        }
+        data.images = data.images.filter(v => v)
     }
 
     const categoryIds = data.categories
+    
     delete data.categories;
+    delete data.newImages;
 
     const product = await prisma.products.update({
         where: {id},
