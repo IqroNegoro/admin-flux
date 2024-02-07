@@ -116,7 +116,7 @@
                     </div>
                 </div>
                 <div class="flex flex-row gap-2">
-                    <button type="submit" class="w-full text-white hover disabled:cursor-not-allowed py-2" @click="handlePost" :disabled="pending || !(newImages.length || images.length) || !name || !stock || !price || !description">
+                    <button type="submit" class="w-full text-white hover disabled:cursor-not-allowed py-2" @click="handlePost" :disabled="pending || !(newImages.length || images.length) || !name || !stock || !price">
                         <i v-if="pending" class="bx bx-loader-alt bx-spin"></i>
                         <p v-else>
                             Edit

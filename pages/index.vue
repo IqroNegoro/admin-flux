@@ -12,15 +12,15 @@
                         <i v-else class="bx bx-refresh"></i>
                     </button>
                 </div>
-                <div class="w-full flex flex-row gap-4">
-                    <div class="p-4 w-max flex flex-col gap-2 shadow-lg rounded-md">
+                <div class="w-full flex flex-col md:flex-row gap-4">
+                    <div class="p-4 md:w-max w-full flex flex-col gap-2 shadow-lg rounded-md">
                         <div class="flex justify-between items-center gap-8">
                             <h1 class="font-medium text-xl">Rp {{ data.rate }}</h1>
                             <i class="bx bx-dollar text-2xl"></i>
                         </div>
                         <p class="text-sm font-medium">Rate</p>
                     </div>
-                    <div class="p-4 w-max flex flex-col gap-2 shadow-lg rounded-md">
+                    <div class="p-4 md:w-max w-full flex flex-col gap-2 shadow-lg rounded-md">
                         <div class="flex justify-between items-center gap-8">
                             <h1 class="font-medium text-xl">{{ data.totalOrders }}</h1>
                             <i class="bx bx-package text-2xl"></i>
