@@ -2,6 +2,11 @@ import prisma from "~/server/db";
 import isMongoId from "validator/lib/isMongoId.js";
 
 export default defineEventHandler(async e => {
+    if (e.context.auth.email !== 'iqro@gmail.com') throw createError({
+        statusCode: 401,
+        message: "Forbidden action"
+    });
+
     const { id } = getRouterParams(e, "id");
 
     if (!isMongoId(id)) throw createError({

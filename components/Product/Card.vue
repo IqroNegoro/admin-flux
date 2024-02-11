@@ -29,7 +29,7 @@ const handleDeleteProduct = async () => {
     await execute();
 
     if (error.value) {
-        notification.error("Soemthing error when deleting product");
+        notification.error("Something error when deleting product");
         return;
     }
     notification.success("Success deleting product");
